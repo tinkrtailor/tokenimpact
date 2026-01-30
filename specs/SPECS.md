@@ -18,6 +18,11 @@ Token Impact helps traders find the best exchange for large orders by calculatin
 | [monetization.md](monetization.md) | Affiliate programs, ad slots, tracking | Ready |
 | [seo.md](seo.md) | Google SEO, LLM discoverability, content strategy | Ready |
 | [nfr.md](nfr.md) | Brand identity, performance, security, accessibility | Ready |
+| [url-state.md](url-state.md) | Shareable links, URL parameters, nuqs integration | Ready |
+| [analytics.md](analytics.md) | Event tracking, metrics, Vercel Analytics | Ready |
+| [content.md](content.md) | Static pages: /about, /methodology, /faq | Ready |
+| [errors.md](errors.md) | Error messages, UI patterns, recovery strategies | Ready |
+| [consent.md](consent.md) | Cookie consent, GDPR, privacy policy | Ready |
 
 ## Target Users
 
