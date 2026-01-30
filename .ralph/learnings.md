@@ -76,10 +76,11 @@ Discoveries about the codebase that future iterations should know.
 
 ## Implementation Status
 
-- **Completed Tasks**: 0/41
+- **Completed Tasks**: 0/44
 - **Project Status**: Specifications complete, implementation pending
 - **Next Step**: Initialize Next.js project (setup-001)
-- **Planning Session**: 2026-01-30 validated all 41 tasks against 8 spec files
+- **Planning Session 1**: 2026-01-30 validated all 41 tasks against 8 spec files
+- **Planning Session 2**: 2026-01-30 added 3 error handling tasks (error-001, error-002, error-003)
 
 ## Planning Session Notes (2026-01-30)
 
@@ -98,9 +99,11 @@ Discoveries about the codebase that future iterations should know.
 6. **API routes** (api-001 to 004): Require exchange aggregator
 7. **UI components** (ui-001 to 008): Can start after setup-002
 
-### Minor Gap Identified
+### Gaps Identified & Resolved
 - `/exchanges` content page mentioned in specs/seo.md (line 116) has no dedicated task
-- Decision: Not critical for MVP, can be added post-launch if needed
+  - Decision: Not critical for MVP, can be added post-launch if needed
+- `specs/errors.md` defines comprehensive error UI patterns but had no implementation tasks
+  - Resolution: Added error-001 (inline validation), error-002 (toasts), error-003 (full-page/offline)
 
 ## Gotchas
 

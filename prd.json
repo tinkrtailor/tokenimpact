@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "lastUpdated": "2026-01-30",
-  "planningNotes": "Planning session validated all 41 tasks against specs. 0% implemented, 100% specified. Ready for setup-001.",
+  "planningNotes": "Planning session 2: Added 3 missing error handling tasks from specs/errors.md. Total: 44 tasks. 0% implemented, 100% specified. Ready for setup-001.",
   "tasks": [
     {
       "id": "setup-001",
@@ -491,6 +491,51 @@
         "Cookie consent banner appears on first visit"
       ],
       "dependencies": ["ui-001"]
+    },
+    {
+      "id": "error-001",
+      "title": "Implement inline validation error UI",
+      "description": "Create error display components for form validation per specs/errors.md. Show red border on invalid inputs, error text below inputs, clear on valid input. Handle empty symbol, empty/invalid/zero/negative quantity errors.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Invalid input shows red border and error message below",
+        "Error clears when user enters valid input",
+        "Focus moves to error message on validation fail",
+        "Error messages match specs/errors.md validation error table"
+      ],
+      "dependencies": ["ui-004", "ui-002"]
+    },
+    {
+      "id": "error-002",
+      "title": "Implement toast notification system",
+      "description": "Create toast component for non-blocking errors per specs/errors.md. Auto-dismiss after 5s, don't stack multiple, position bottom-center (mobile) or bottom-right (desktop). Use amber styling for warnings.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Toast appears for exchange timeout warnings",
+        "Toast auto-dismisses after 5 seconds",
+        "Only one toast visible at a time",
+        "Mobile: bottom-center, Desktop: bottom-right positioning"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "error-003",
+      "title": "Implement full-page error and offline states",
+      "description": "Create error boundary and offline banner per specs/errors.md. Full-page error with retry button when all exchanges fail. Persistent offline banner at top that auto-dismisses on reconnect.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Full-page error shows when all exchanges fail with retry button",
+        "Offline banner appears when navigator.onLine is false",
+        "Offline banner dismisses automatically when connection restored",
+        "Error boundary catches React errors and shows recovery UI"
+      ],
+      "dependencies": ["ui-007"]
     },
     {
       "id": "a11y-001",
