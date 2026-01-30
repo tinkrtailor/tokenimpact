@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-30",
-  "planningNotes": "Planning session 3 (2026-01-30): Validated all 44 tasks against 14 spec files. Updated ui-007 with Copy Link feature, ui-001 with dynamic OG tags, legal-001 clarified per consent.md MVP approach. 0% implemented, 100% specified. Ready for setup-001.",
+  "planningNotes": "Planning session 6 (2026-01-30): Added brand-001 task for brand assets (logos, favicons, OG images, manifest) per specs/brand-assets.md. 0% implemented, 100% specified. 45 tasks total. Ready for setup-001.",
   "tasks": [
     {
       "id": "setup-001",
@@ -640,6 +640,22 @@
         "Response schemas match Zod validation"
       ],
       "dependencies": ["api-001", "api-002", "api-003"]
+    },
+    {
+      "id": "brand-001",
+      "title": "Create brand assets (logos, favicons, OG images)",
+      "description": "Create all brand assets per specs/brand-assets.md. Design icon mark (stylized T or impact rings), generate favicon package (ico, svg, apple-touch-icon, PWA icons), create OG image (1200x630), create logo variants (full, compact, icon, mono), and manifest.webmanifest.",
+      "priority": 2,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "favicon.ico, favicon.svg, apple-touch-icon.png exist in public/",
+        "icon-192.png and icon-512.png exist for PWA",
+        "og-image.png (1200x630) renders correctly when shared on social media",
+        "manifest.webmanifest contains correct theme colors and icon references",
+        "Logo SVGs (logo-full.svg, logo-compact.svg, logo-icon.svg) exist in public/images/logo/"
+      ],
+      "dependencies": ["setup-003"]
     }
   ]
 }
