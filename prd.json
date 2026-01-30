@@ -1,0 +1,597 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-01-30",
+  "tasks": [
+    {
+      "id": "setup-001",
+      "title": "Initialize Next.js 15 project with TypeScript",
+      "description": "Create Next.js 15 project with App Router, TypeScript strict mode, ESLint, and proper tsconfig.json settings per specs/nfr.md and .claude/rules/typescript-strict-mode.md",
+      "priority": 1,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "npm run dev starts server on port 3000",
+        "npm run build succeeds without TypeScript errors",
+        "tsconfig.json has strict: true and noUncheckedIndexedAccess: true"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "setup-002",
+      "title": "Configure Tailwind CSS with shadcn/ui",
+      "description": "Install Tailwind CSS and initialize shadcn/ui with dark theme. Configure color palette from nfr.md (Void Black #09090b, Charcoal #18181b, Electric Cyan #22d3ee, etc.). Install Geist fonts.",
+      "priority": 1,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "tailwind.config.ts includes all custom colors from nfr.md",
+        "npx shadcn@latest add button succeeds",
+        "Geist Sans and Geist Mono fonts load correctly"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "setup-003",
+      "title": "Create project structure directories",
+      "description": "Create app/, components/, components/ui/, lib/, lib/exchanges/, public/logos/ directories matching PRODUCT.md structure",
+      "priority": 1,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "All directories from PRODUCT.md exist",
+        "lib/exchanges/ directory is present",
+        "public/logos/ directory is present"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "setup-004",
+      "title": "Install core dependencies",
+      "description": "Install @tanstack/react-query, zod, nuqs, lucide-react. These are required for data fetching, validation, URL state, and icons per PRODUCT.md tech stack.",
+      "priority": 1,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "package.json contains @tanstack/react-query, zod, nuqs, lucide-react",
+        "npm run build succeeds after installation"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "core-001",
+      "title": "Implement price impact calculation engine",
+      "description": "Create lib/calculations.ts with orderbook walking algorithm per specs/core.md. Must calculate avgFillPrice, totalCost, priceImpact, depthConsumed, fillable, and shortfall. Handle BUY (walk asks low→high) and SELL (walk bids high→low) correctly.",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "calculatePriceImpact function handles BUY orders correctly (walks asks)",
+        "calculatePriceImpact function handles SELL orders correctly (walks bids)",
+        "Returns fillable: false with shortfall when orderbook depth insufficient",
+        "priceImpact formula is ((avgFillPrice - midPrice) / midPrice) * 100"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "core-002",
+      "title": "Create exchange type definitions",
+      "description": "Create lib/exchanges/types.ts with TypeScript interfaces: Orderbook, OrderbookLevel, ExchangeQuote, NormalizedQuote, ExchangeStatus. Use strict typing per .claude/rules/typescript-interfaces-types.md",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "Orderbook interface has bids, asks, timestamp fields",
+        "ExchangeQuote includes all fields from specs/api.md response schema",
+        "All types export correctly from lib/exchanges/types.ts"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "core-003",
+      "title": "Implement symbol normalization",
+      "description": "Create lib/symbols.ts with bidirectional symbol mapping per specs/symbols.md. Handle Binance (BTCUSDT→BTC-USDT), Coinbase (BTC-USD→BTC-USD), Kraken (XXBTZUSD→BTC-USD, XBT→BTC mapping).",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "normalizeSymbol('BTCUSDT', 'binance') returns 'BTC-USDT'",
+        "toExchangeSymbol('BTC-USD', 'kraken') returns 'XXBTZUSD' or equivalent",
+        "Kraken XBT→BTC mapping works correctly"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "core-004",
+      "title": "Create Zod validation schemas",
+      "description": "Create lib/validation.ts with Zod schemas for API request/response validation per specs/api.md. Include QuoteRequestSchema, SymbolsRequestSchema, QuoteResponseSchema, ErrorResponseSchema.",
+      "priority": 2,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "QuoteRequestSchema validates symbol, side (BUY|SELL), quantity",
+        "Quantity validation rejects <= 0 and non-numeric",
+        "Error response includes code, message, details fields"
+      ],
+      "dependencies": ["core-002"]
+    },
+    {
+      "id": "exchange-001",
+      "title": "Implement Binance API client",
+      "description": "Create lib/exchanges/binance.ts with orderbook fetching (GET /api/v3/depth?limit=500) and 24h volume (GET /api/v3/ticker/24hr) per specs/exchanges.md. Handle rate limits (1200/min), error responses, and response normalization.",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "fetchOrderbook returns normalized orderbook with 100+ levels",
+        "fetchVolume returns 24h volume in base currency",
+        "Handles rate limit errors with exponential backoff (max 3 retries)"
+      ],
+      "dependencies": ["core-002", "core-003"]
+    },
+    {
+      "id": "exchange-002",
+      "title": "Implement Coinbase API client",
+      "description": "Create lib/exchanges/coinbase.ts with orderbook fetching (GET /products/{symbol}/book?level=2) and stats (GET /products/{symbol}/stats) per specs/exchanges.md. Handle rate limits (10/sec) and response normalization.",
+      "priority": 2,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "fetchOrderbook returns normalized orderbook (level 2 = top 50)",
+        "fetchVolume returns 24h volume from /stats endpoint",
+        "Handles rate limit errors with exponential backoff"
+      ],
+      "dependencies": ["core-002", "core-003"]
+    },
+    {
+      "id": "exchange-003",
+      "title": "Implement Kraken API client",
+      "description": "Create lib/exchanges/kraken.ts with orderbook fetching (GET /0/public/Depth?count=500) and ticker (GET /0/public/Ticker) per specs/exchanges.md. Handle slow rate limits (1/sec) with request queuing.",
+      "priority": 2,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "fetchOrderbook returns normalized orderbook with correct symbol mapping",
+        "fetchVolume extracts volume from ticker response",
+        "Request queuing prevents rate limit violations (1 req/sec)"
+      ],
+      "dependencies": ["core-002", "core-003"]
+    },
+    {
+      "id": "exchange-004",
+      "title": "Create exchange aggregator",
+      "description": "Create lib/exchanges/index.ts that orchestrates parallel fetching from all exchanges. Implement timeout handling (5s), partial success (return available exchanges on failure), and status tracking per specs/exchanges.md.",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "Fetches from all exchanges in parallel using Promise.allSettled",
+        "Times out individual exchanges after 5 seconds",
+        "Returns partial results when some exchanges fail",
+        "Status field indicates ok, error, timeout, or unavailable"
+      ],
+      "dependencies": ["exchange-001", "exchange-002", "exchange-003"]
+    },
+    {
+      "id": "api-001",
+      "title": "Implement GET /api/symbols endpoint",
+      "description": "Create app/api/symbols/route.ts returning available trading pairs with exchange availability per specs/api.md. Support query params: quote, exchange, search, limit. Cache response for 1 hour.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /api/symbols returns list of normalized symbols",
+        "?quote=USD filters to USD quote pairs only",
+        "?search=BTC matches BTC-USD, ETH-BTC, etc.",
+        "Response includes Cache-Control: max-age=3600 header"
+      ],
+      "dependencies": ["core-003", "core-004"]
+    },
+    {
+      "id": "api-002",
+      "title": "Implement GET /api/quote endpoint",
+      "description": "Create app/api/quote/route.ts that calculates price impact across exchanges per specs/api.md. Fetch orderbooks, calculate impact, return comparison with 'best' exchange. Include affiliate URLs.",
+      "priority": 1,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /api/quote?symbol=BTC-USD&side=BUY&quantity=1 returns valid response",
+        "Response includes results array with all exchanges",
+        "'best' field identifies lowest cost (buy) or highest proceeds (sell)",
+        "Each result includes affiliateUrl for the exchange"
+      ],
+      "dependencies": ["core-001", "core-004", "exchange-004"]
+    },
+    {
+      "id": "api-003",
+      "title": "Implement GET /api/health endpoint",
+      "description": "Create app/api/health/route.ts returning exchange connectivity status and latency per specs/api.md. Ping each exchange and report status (ok, degraded, offline) with latency in ms.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /api/health returns status for all three exchanges",
+        "Each exchange includes latency in milliseconds",
+        "Returns degraded status if latency > 500ms"
+      ],
+      "dependencies": ["exchange-004"]
+    },
+    {
+      "id": "api-004",
+      "title": "Implement rate limiting middleware",
+      "description": "Create rate limiting for API endpoints per specs/api.md: /symbols (60/min), /quote (30/min), /health (10/min). Use IP-based limiting. Include X-RateLimit-* headers in responses.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "/quote endpoint returns 429 after 30 requests in 1 minute",
+        "Response includes X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset headers",
+        "Rate limits are per-IP"
+      ],
+      "dependencies": ["api-001", "api-002", "api-003"]
+    },
+    {
+      "id": "ui-001",
+      "title": "Create root layout with brand styling",
+      "description": "Create app/layout.tsx with Geist fonts, dark theme, metadata per specs/nfr.md. Include SEO meta tags per specs/seo.md (title, description, OpenGraph).",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Page renders with Void Black (#09090b) background",
+        "Geist Sans and Geist Mono fonts are applied",
+        "Meta title is 'Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity'"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "ui-002",
+      "title": "Implement symbol selector component",
+      "description": "Create components/pair-selector.tsx as searchable dropdown per specs/ui.md. Show exchange availability badges, recently used at top, common pairs (BTC, ETH) prioritized. Full keyboard navigation.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Typing filters symbol list in real-time",
+        "Each symbol shows exchange availability badges",
+        "Arrow keys navigate, Enter selects",
+        "BTC and ETH pairs appear before obscure tokens"
+      ],
+      "dependencies": ["setup-002", "api-001"]
+    },
+    {
+      "id": "ui-003",
+      "title": "Implement direction toggle component",
+      "description": "Create components/direction-toggle.tsx with BUY (cyan) and SELL (magenta) buttons per specs/ui.md and nfr.md colors. Triggers recalculation when toggled if quantity is set.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "BUY button uses Electric Cyan (#22d3ee) when selected",
+        "SELL button uses Magenta (#e879f9) when selected",
+        "Toggle dispatches onChange event with new side value"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "ui-004",
+      "title": "Implement quantity input component",
+      "description": "Create components/quantity-input.tsx with numeric formatting (thousand separators), base asset label suffix, quick preset buttons (1, 10, 100, 1000) per specs/ui.md.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Input displays 1000 as '1,000'",
+        "Base asset label shows next to input (e.g., 'BTC')",
+        "Quick buttons set predefined values on click",
+        "Rejects non-numeric input"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "ui-005",
+      "title": "Implement exchange card component (mobile)",
+      "description": "Create components/exchange-card.tsx showing single exchange results per specs/ui.md. Display impact %, cost, affiliate CTA. Best card has 'BEST' badge and subtle glow effect. Unavailable cards are grayed.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Card displays avgFillPrice, totalCost, priceImpact, volumePct",
+        "Best card shows 'BEST' badge with Emerald (#34d399) styling",
+        "Unavailable exchanges show grayed card with status message",
+        "Affiliate CTA button is full-width at bottom"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "ui-006",
+      "title": "Implement results table component (desktop)",
+      "description": "Create components/results-table.tsx with 3-column comparison per specs/ui.md. Columns: Exchange, Mid Price, Avg Fill, Impact, Cost, Action. Sortable columns, best row highlighted, unavailable at bottom.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Table displays all three exchanges in columns",
+        "Best exchange row has highlighted background",
+        "Columns are sortable by clicking header",
+        "Unavailable exchanges appear at bottom with gray styling"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "ui-007",
+      "title": "Implement main calculator page",
+      "description": "Create app/page.tsx combining all UI components per specs/ui.md. Mobile: stacked layout with symbol, side, quantity, compare button, and result cards. Desktop: horizontal controls with results table.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Mobile layout (< 768px) shows stacked card results",
+        "Desktop layout (≥ 1024px) shows table results",
+        "Compare button triggers /api/quote fetch",
+        "Loading state shows skeleton components"
+      ],
+      "dependencies": ["ui-002", "ui-003", "ui-004", "ui-005", "ui-006", "api-002"]
+    },
+    {
+      "id": "ui-008",
+      "title": "Implement skeleton loading states",
+      "description": "Create loading skeletons matching final layout shapes per specs/ui.md. Individual exchange loading (don't wait for slowest). Stale data indicator if > 5 seconds old.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Skeleton matches shape of exchange card/table row",
+        "Each exchange shows skeleton independently during load",
+        "Stale timestamp warning appears if data > 5s old"
+      ],
+      "dependencies": ["ui-005", "ui-006"]
+    },
+    {
+      "id": "monetization-001",
+      "title": "Implement affiliate link system",
+      "description": "Create redirect routes at app/go/[exchange]/route.ts per specs/monetization.md. Track clicks (exchange, symbol, side, quantity, timestamp, session) before redirecting to affiliate URL.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "/go/binance redirects to Binance affiliate URL",
+        "Click tracking captures exchange, symbol, side, quantity",
+        "Session ID is generated and tracked",
+        "All three exchanges have working redirect routes"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "monetization-002",
+      "title": "Implement ad slot component",
+      "description": "Create components/ad-slot.tsx wrapper per specs/monetization.md. Support slot IDs: top-banner (320x50 mobile, 728x90 desktop), results-bottom (320x100 mobile), sidebar (300x250 desktop only).",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "AdSlot renders placeholder with correct dimensions",
+        "Mobile hides sidebar ad slot",
+        "Ad slot has 'Advertisement' label",
+        "Lazy loads after main content"
+      ],
+      "dependencies": ["setup-002"]
+    },
+    {
+      "id": "seo-001",
+      "title": "Create sitemap.xml",
+      "description": "Create app/sitemap.ts generating XML sitemap per specs/seo.md. Include /, /about, /methodology, /faq pages.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /sitemap.xml returns valid XML sitemap",
+        "Includes all public pages with lastmod dates",
+        "Priority and changefreq are set appropriately"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "seo-002",
+      "title": "Create robots.txt",
+      "description": "Create public/robots.txt allowing crawling of all public pages, referencing sitemap per specs/seo.md.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /robots.txt returns valid robots.txt",
+        "Sitemap URL is included",
+        "All public paths are allowed"
+      ],
+      "dependencies": ["seo-001"]
+    },
+    {
+      "id": "seo-003",
+      "title": "Create llms.txt for LLM discoverability",
+      "description": "Create public/llms.txt with machine-readable site description per specs/seo.md. Include description, use cases, how it works, supported exchanges, URL, API documentation.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "GET /llms.txt returns plain text description",
+        "Includes all sections from specs/seo.md llms.txt spec",
+        "API endpoints are documented"
+      ],
+      "dependencies": ["setup-001"]
+    },
+    {
+      "id": "seo-004",
+      "title": "Add structured data (Schema.org)",
+      "description": "Add JSON-LD structured data to layout per specs/seo.md. Include WebApplication, Organization schemas. Add FAQPage schema to /faq when created.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Homepage includes WebApplication schema in JSON-LD",
+        "Organization schema includes name and logo",
+        "Schema validates with Google Rich Results Test"
+      ],
+      "dependencies": ["ui-001"]
+    },
+    {
+      "id": "page-001",
+      "title": "Create /about page",
+      "description": "Create app/about/page.tsx explaining what price impact is and why it matters per specs/seo.md content strategy. Target 'what is price impact crypto' keyword.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Page renders at /about",
+        "Explains price impact concept clearly",
+        "Includes internal links to calculator and methodology",
+        "Has proper meta description targeting keyword"
+      ],
+      "dependencies": ["ui-001"]
+    },
+    {
+      "id": "page-002",
+      "title": "Create /methodology page",
+      "description": "Create app/methodology/page.tsx explaining calculation methodology per specs/seo.md. Document orderbook walking algorithm, data sources, freshness. Target 'how to calculate slippage' keyword.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Page renders at /methodology",
+        "Explains calculation algorithm with examples",
+        "Lists data sources (Binance, Coinbase, Kraken APIs)",
+        "Includes code examples or formulas"
+      ],
+      "dependencies": ["ui-001"]
+    },
+    {
+      "id": "page-003",
+      "title": "Create /faq page",
+      "description": "Create app/faq/page.tsx with common questions per specs/seo.md. Include FAQPage schema. Answer long-tail queries like 'how much slippage on $100k bitcoin order'.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Page renders at /faq",
+        "Contains at least 10 FAQs",
+        "Includes FAQPage structured data",
+        "Answers specific long-tail queries from specs/seo.md"
+      ],
+      "dependencies": ["ui-001", "seo-004"]
+    },
+    {
+      "id": "legal-001",
+      "title": "Create privacy policy and disclosures",
+      "description": "Create footer with affiliate disclosure per specs/monetization.md: 'We earn commission from partner links'. Add link to privacy policy. Implement cookie consent banner for GDPR.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "Footer shows affiliate disclosure text",
+        "Privacy policy link is present",
+        "Cookie consent banner appears on first visit"
+      ],
+      "dependencies": ["ui-001"]
+    },
+    {
+      "id": "a11y-001",
+      "title": "Implement keyboard navigation",
+      "description": "Ensure full keyboard navigation per specs/nfr.md accessibility requirements. All interactive elements reachable via Tab, visible focus states, Escape closes dropdowns.",
+      "priority": 3,
+      "status": "pending",
+      "category": "polish",
+      "verification": [
+        "Tab navigates through all interactive elements",
+        "Focus ring visible on all focused elements",
+        "Enter/Space activates buttons and selections",
+        "Escape closes symbol dropdown"
+      ],
+      "dependencies": ["ui-007"]
+    },
+    {
+      "id": "a11y-002",
+      "title": "Add ARIA labels and screen reader support",
+      "description": "Add ARIA labels to all interactive elements per specs/nfr.md. Ensure results are announced to screen readers. Use semantic HTML.",
+      "priority": 3,
+      "status": "pending",
+      "category": "polish",
+      "verification": [
+        "All buttons have aria-label or accessible text",
+        "Results table/cards have appropriate ARIA roles",
+        "Form inputs have associated labels",
+        "Status messages use aria-live regions"
+      ],
+      "dependencies": ["ui-007"]
+    },
+    {
+      "id": "perf-001",
+      "title": "Optimize Core Web Vitals",
+      "description": "Optimize for LCP < 2.0s, FID < 100ms, CLS < 0.1 per specs/nfr.md. Preload fonts, lazy load ads, reserve space for dynamic content.",
+      "priority": 3,
+      "status": "pending",
+      "category": "polish",
+      "verification": [
+        "Lighthouse performance score > 90",
+        "LCP < 2.0 seconds",
+        "CLS < 0.1 (no layout shift from ads)",
+        "FID < 100ms"
+      ],
+      "dependencies": ["ui-007"]
+    },
+    {
+      "id": "deploy-001",
+      "title": "Configure Vercel deployment",
+      "description": "Set up Vercel project with production and preview deployments per PRODUCT.md. Configure environment variables, edge caching, and custom domain (if available).",
+      "priority": 2,
+      "status": "pending",
+      "category": "setup",
+      "verification": [
+        "vercel.json exists with proper configuration",
+        "Preview deployments work on PR",
+        "Production build succeeds on Vercel"
+      ],
+      "dependencies": ["ui-007", "api-002"]
+    },
+    {
+      "id": "monitor-001",
+      "title": "Set up error tracking and analytics",
+      "description": "Integrate Vercel Analytics for performance monitoring per specs/nfr.md. Consider Sentry for error tracking. Add anonymous session tracking for monetization metrics.",
+      "priority": 3,
+      "status": "pending",
+      "category": "polish",
+      "verification": [
+        "Vercel Analytics dashboard shows traffic",
+        "Errors are captured and reported",
+        "Affiliate click tracking works"
+      ],
+      "dependencies": ["deploy-001"]
+    },
+    {
+      "id": "test-001",
+      "title": "Create unit tests for calculation engine",
+      "description": "Write unit tests for lib/calculations.ts per testing-philosophy.md. Cover BUY/SELL logic, partial fills, insufficient liquidity, edge cases (zero quantity, empty orderbook).",
+      "priority": 2,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "Tests cover BUY order calculation (walks asks)",
+        "Tests cover SELL order calculation (walks bids)",
+        "Tests verify fillable: false when orderbook insufficient",
+        "Edge cases tested: zero quantity, empty orderbook, single level"
+      ],
+      "dependencies": ["core-001"]
+    },
+    {
+      "id": "test-002",
+      "title": "Create integration tests for API endpoints",
+      "description": "Write integration tests for /api/quote, /api/symbols, /api/health per testing-philosophy.md. Mock exchange responses, test error handling, verify response schemas.",
+      "priority": 3,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "/api/quote tests cover success, partial failure, validation errors",
+        "/api/symbols tests cover filtering and caching",
+        "Response schemas match Zod validation"
+      ],
+      "dependencies": ["api-001", "api-002", "api-003"]
+    }
+  ]
+}
