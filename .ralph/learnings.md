@@ -81,16 +81,40 @@ Discoveries about the codebase that future iterations should know.
 - **Next Step**: Initialize Next.js project (setup-001)
 - **Planning Session 1**: 2026-01-30 validated all 41 tasks against 8 spec files
 - **Planning Session 2**: 2026-01-30 added 3 error handling tasks (error-001, error-002, error-003)
+- **Planning Session 3**: 2026-01-30 validated all 44 tasks against 14 spec files, minor updates to ui-001, ui-007, legal-001
 
-## Planning Session Notes (2026-01-30)
+## Planning Session Notes
 
-### Verification Results
+### Session 3 (2026-01-30)
+
+**Validation Method**: 8 parallel subagents analyzed spec vs implementation gaps
+
+**Findings**:
+- All 14 spec files reviewed against 44 tasks
+- 100% spec coverage confirmed
+- Minor gaps found and resolved:
+  - `specs/url-state.md` Copy Link feature → added to ui-007 verification
+  - `specs/url-state.md` Dynamic OG tags → added to ui-001 description/verification
+  - `specs/consent.md` MVP approach (no consent banner) → clarified legal-001 description
+
+**Key Clarification - Cookie Consent**:
+- MVP does NOT need cookie consent banner per specs/consent.md
+- Reason: Vercel Analytics is cookie-less, affiliate tracking is server-side redirect
+- legal-001 updated to reflect this decision
+
+### Session 2 (2026-01-30)
+
+- Added 3 error handling tasks (error-001, error-002, error-003) from specs/errors.md
+
+### Session 1 (2026-01-30)
+
+**Verification Results**:
 - **Source code files**: 0 (no app/, components/, lib/ directories exist)
 - **Configuration files**: 0 (no package.json, tsconfig.json, tailwind.config.ts)
 - **TODOs/placeholders**: 0 (codebase is spec-only)
-- **Task coverage**: 100% of specs covered by 41 tasks
+- **Task coverage**: 100% of specs covered by 44 tasks
 
-### Critical Path
+**Critical Path**:
 1. **Setup phase** (setup-001 to setup-004): Initialize Next.js, Tailwind, shadcn, dependencies
 2. **Core types** (core-002): Type definitions required before exchange clients
 3. **Symbol mapping** (core-003): Normalization functions required before API
@@ -99,7 +123,7 @@ Discoveries about the codebase that future iterations should know.
 6. **API routes** (api-001 to 004): Require exchange aggregator
 7. **UI components** (ui-001 to 008): Can start after setup-002
 
-### Gaps Identified & Resolved
+**Gaps Identified & Resolved**:
 - `/exchanges` content page mentioned in specs/seo.md (line 116) has no dedicated task
   - Decision: Not critical for MVP, can be added post-launch if needed
 - `specs/errors.md` defines comprehensive error UI patterns but had no implementation tasks

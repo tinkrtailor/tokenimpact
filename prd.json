@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-30",
-  "planningNotes": "Planning session 2: Added 3 missing error handling tasks from specs/errors.md. Total: 44 tasks. 0% implemented, 100% specified. Ready for setup-001.",
+  "planningNotes": "Planning session 3 (2026-01-30): Validated all 44 tasks against 14 spec files. Updated ui-007 with Copy Link feature, ui-001 with dynamic OG tags, legal-001 clarified per consent.md MVP approach. 0% implemented, 100% specified. Ready for setup-001.",
   "tasks": [
     {
       "id": "setup-001",
@@ -233,14 +233,15 @@
     {
       "id": "ui-001",
       "title": "Create root layout with brand styling",
-      "description": "Create app/layout.tsx with Geist fonts, dark theme, metadata per specs/nfr.md. Include SEO meta tags per specs/seo.md (title, description, OpenGraph).",
+      "description": "Create app/layout.tsx with Geist fonts, dark theme, metadata per specs/nfr.md. Include SEO meta tags per specs/seo.md (title, description, OpenGraph). Support dynamic OG tags when URL has valid params per specs/url-state.md.",
       "priority": 2,
       "status": "pending",
       "category": "feature",
       "verification": [
         "Page renders with Void Black (#09090b) background",
         "Geist Sans and Geist Mono fonts are applied",
-        "Meta title is 'Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity'"
+        "Meta title is 'Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity'",
+        "Dynamic OG title/description generated when URL has symbol param (e.g., ?s=BTC-USD)"
       ],
       "dependencies": ["setup-002"]
     },
@@ -321,7 +322,7 @@
     {
       "id": "ui-007",
       "title": "Implement main calculator page",
-      "description": "Create app/page.tsx combining all UI components per specs/ui.md. Mobile: stacked layout with symbol, side, quantity, compare button, and result cards. Desktop: horizontal controls with results table.",
+      "description": "Create app/page.tsx combining all UI components per specs/ui.md. Mobile: stacked layout with symbol, side, quantity, compare button, and result cards. Desktop: horizontal controls with results table. Include Copy Link feature per specs/url-state.md.",
       "priority": 2,
       "status": "pending",
       "category": "feature",
@@ -329,7 +330,8 @@
         "Mobile layout (< 768px) shows stacked card results",
         "Desktop layout (≥ 1024px) shows table results",
         "Compare button triggers /api/quote fetch",
-        "Loading state shows skeleton components"
+        "Loading state shows skeleton components",
+        "Copy Link button appears after successful calculation and copies URL to clipboard"
       ],
       "dependencies": ["ui-002", "ui-003", "ui-004", "ui-005", "ui-006", "api-002"]
     },
@@ -481,14 +483,14 @@
     {
       "id": "legal-001",
       "title": "Create privacy policy and disclosures",
-      "description": "Create footer with affiliate disclosure per specs/monetization.md: 'We earn commission from partner links'. Add link to privacy policy. Implement cookie consent banner for GDPR.",
+      "description": "Create footer with affiliate disclosure per specs/monetization.md: 'We earn commission from partner links'. Add link to privacy policy. Per specs/consent.md MVP approach: no cookie consent banner needed (Vercel Analytics is cookie-less, affiliate tracking is server-side).",
       "priority": 3,
       "status": "pending",
       "category": "feature",
       "verification": [
         "Footer shows affiliate disclosure text",
         "Privacy policy link is present",
-        "Cookie consent banner appears on first visit"
+        "Privacy policy page exists at /privacy or linked externally"
       ],
       "dependencies": ["ui-001"]
     },
