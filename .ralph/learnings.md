@@ -12,7 +12,10 @@ Discoveries about the codebase that future iterations should know.
 
 ## Codebase Patterns
 
-(To be populated as implementation progresses)
+- **Tailwind CSS v3**: Using v3 for shadcn/ui compatibility (v4 not yet supported)
+- **shadcn/ui**: Initialized with dark theme, components in `components/ui/`
+- **CSS Variables**: Brand colors defined in `app/globals.css` as HSL CSS variables
+- **Font Loading**: Geist fonts loaded via `geist` package in layout.tsx
 
 ## Dependencies
 
@@ -76,9 +79,9 @@ Discoveries about the codebase that future iterations should know.
 
 ## Implementation Status
 
-- **Completed Tasks**: 1/45
+- **Completed Tasks**: 2/45
 - **Project Status**: Implementation started
-- **Next Step**: setup-002, setup-003, setup-004 (can run in parallel)
+- **Next Step**: setup-003, setup-004 (can run in parallel)
 - **Planning Session 1**: 2026-01-30 validated all 41 tasks against 8 spec files
 - **Planning Session 2**: 2026-01-30 added 3 error handling tasks (error-001, error-002, error-003)
 - **Planning Session 3**: 2026-01-30 validated all 44 tasks against 14 spec files, minor updates to ui-001, ui-007, legal-001
