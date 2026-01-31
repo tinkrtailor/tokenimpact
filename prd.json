@@ -168,14 +168,16 @@
       "title": "Implement Kraken API client",
       "description": "Create lib/exchanges/kraken.ts with orderbook fetching (GET /0/public/Depth?count=500) and ticker (GET /0/public/Ticker) per specs/exchanges.md. Handle slow rate limits (1/sec) with request queuing.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "fetchOrderbook returns normalized orderbook with correct symbol mapping",
         "fetchVolume extracts volume from ticker response",
         "Request queuing prevents rate limit violations (1 req/sec)"
       ],
-      "dependencies": ["core-002", "core-003"]
+      "dependencies": ["core-002", "core-003"],
+      "notes": "Created lib/exchanges/kraken.ts implementing ExchangeClient interface. Uses RequestQueue class to enforce 1.1s minimum interval between requests. Handles Kraken's unique response format (error array + result object with dynamic keys), exponential backoff retry for rate limits. Parses Depth and Ticker endpoints correctly."
     },
     {
       "id": "exchange-004",
