@@ -334,7 +334,8 @@
       "title": "Implement exchange card component (mobile)",
       "description": "Create components/exchange-card.tsx showing single exchange results per specs/ui.md. Display impact %, cost, affiliate CTA. Best card has 'BEST' badge and subtle glow effect. Unavailable cards are grayed.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Card displays avgFillPrice, totalCost, priceImpact, volumePct",
@@ -342,7 +343,8 @@
         "Unavailable exchanges show grayed card with status message",
         "Affiliate CTA button is full-width at bottom"
       ],
-      "dependencies": ["setup-002"]
+      "dependencies": ["setup-002"],
+      "notes": "Created components/exchange-card.tsx with Card component from shadcn/ui. Displays price impact, total cost, average fill price, and volume percentage. Best card has BEST badge with success color (#34d399) and subtle glow ring. Unavailable exchanges show grayed with opacity-60 and appropriate status messages. Affiliate CTA is full-width button in CardFooter, opens in new tab."
     },
     {
       "id": "ui-006",
