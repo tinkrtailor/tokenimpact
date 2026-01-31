@@ -65,15 +65,6 @@ function parseFormattedValue(value: string): string {
 }
 
 /**
- * Validates if a string is a valid positive number.
- */
-function isValidPositiveNumber(value: string): boolean {
-  if (!value || value === ".") return false;
-  const num = parseFloat(value);
-  return !isNaN(num) && num > 0;
-}
-
-/**
  * Quantity input component with numeric formatting, base asset label,
  * and quick preset buttons.
  *
@@ -159,7 +150,6 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
     }, [value, onChange]);
 
     const hasError = Boolean(error);
-    const showValidation = value !== "" && !isValidPositiveNumber(value);
 
     return (
       <div className={cn("space-y-2", className)}>
@@ -174,11 +164,11 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
             onBlur={handleBlur}
             placeholder={placeholder}
             disabled={disabled}
-            aria-invalid={hasError || showValidation}
+            aria-invalid={hasError}
             aria-describedby={hasError ? "quantity-error" : undefined}
             className={cn(
               "pr-16 font-mono",
-              (hasError || showValidation) && "border-destructive focus-visible:ring-destructive"
+              hasError && "border-destructive focus-visible:ring-destructive"
             )}
           />
           {baseAsset && (
@@ -191,13 +181,13 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
         </div>
 
         {/* Error message */}
-        {(hasError || showValidation) && (
+        {hasError && (
           <p
             id="quantity-error"
             className="text-sm text-destructive"
             role="alert"
           >
-            {error || "Please enter a positive number"}
+            {error}
           </p>
         )}
 
@@ -226,4 +216,4 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
 
 QuantityInput.displayName = "QuantityInput";
 
-export { QuantityInput, formatWithThousandSeparators, parseFormattedValue, isValidPositiveNumber };
+export { QuantityInput, formatWithThousandSeparators, parseFormattedValue };

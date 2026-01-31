@@ -82,6 +82,8 @@ export interface PairSelectorProps {
   onChange: (symbol: string) => void;
   disabled?: boolean;
   placeholder?: string;
+  /** Error message to display */
+  error?: string;
   className?: string;
 }
 
@@ -102,10 +104,12 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
       onChange,
       disabled = false,
       placeholder = "Select pair...",
+      error,
       className,
     },
     ref
   ) => {
+    const hasError = Boolean(error);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [recentSymbols, setRecentSymbols] = useState<string[]>([]);
@@ -181,32 +185,36 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
     }, [symbols, value]);
 
     return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            ref={ref}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            aria-label="Select trading pair"
-            disabled={disabled}
-            className={cn(
-              "w-full justify-between bg-card hover:bg-secondary/50",
-              !value && "text-muted-foreground",
-              className
-            )}
-          >
-            <span className="truncate">
-              {selectedSymbol ? selectedSymbol.symbol : placeholder}
-            </span>
-            <ChevronDown
+      <div className="space-y-1.5">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              ref={ref}
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              aria-label="Select trading pair"
+              aria-invalid={hasError}
+              aria-describedby={hasError ? "pair-selector-error" : undefined}
+              disabled={disabled}
               className={cn(
-                "ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
-                open && "rotate-180"
+                "w-full justify-between bg-card hover:bg-secondary/50",
+                !value && "text-muted-foreground",
+                hasError && "border-destructive focus-visible:ring-destructive",
+                className
               )}
-            />
-          </Button>
-        </PopoverTrigger>
+            >
+              <span className="truncate">
+                {selectedSymbol ? selectedSymbol.symbol : placeholder}
+              </span>
+              <ChevronDown
+                className={cn(
+                  "ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
+                  open && "rotate-180"
+                )}
+              />
+            </Button>
+          </PopoverTrigger>
         <PopoverContent
           className="w-[var(--radix-popover-trigger-width)] p-0"
           align="start"
@@ -265,6 +273,17 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
           </Command>
         </PopoverContent>
       </Popover>
+      {/* Error message */}
+      {hasError && (
+        <p
+          id="pair-selector-error"
+          className="text-sm text-destructive"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
+    </div>
     );
   }
 );

@@ -57,6 +57,15 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
+  // Validation error states
+  const [symbolError, setSymbolError] = useState<string | null>(null);
+  const [quantityError, setQuantityError] = useState<string | null>(null);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+
+  // Refs for focusing on errors
+  const pairSelectorRef = useRef<HTMLButtonElement>(null);
+  const quantityInputRef = useRef<HTMLInputElement>(null);
+
   // Get base asset for quantity input label
   const baseAsset = useMemo(() => {
     if (!symbol) return undefined;
@@ -112,6 +121,10 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     setSymbol(newSymbol);
     setQuoteResult(null);
     setError(null);
+    // Clear symbol error when user selects a symbol
+    if (newSymbol) {
+      setSymbolError(null);
+    }
   }, []);
 
   // Handle side change
@@ -126,7 +139,62 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
   const handleQuantityChange = useCallback((newQuantity: string) => {
     setQuantity(newQuantity);
     // Don't clear results on quantity change to allow easy adjustments
+    // Clear quantity error if new value is valid
+    if (hasAttemptedSubmit) {
+      const num = parseFloat(newQuantity);
+      if (!isNaN(num) && num > 0) {
+        setQuantityError(null);
+      }
+    }
+  }, [hasAttemptedSubmit]);
+
+  /**
+   * Validates the quantity input and returns an error message or null.
+   * Error messages per specs/errors.md:
+   * - Empty quantity: "Enter a quantity"
+   * - Invalid quantity: "Enter a valid number"
+   * - Zero quantity: "Quantity must be greater than 0"
+   * - Negative quantity: "Quantity must be positive"
+   */
+  const validateQuantity = useCallback((qty: string): string | null => {
+    if (!qty || qty.trim() === "") {
+      return "Enter a quantity";
+    }
+    const num = parseFloat(qty);
+    if (isNaN(num)) {
+      return "Enter a valid number";
+    }
+    if (num < 0) {
+      return "Quantity must be positive";
+    }
+    if (num === 0) {
+      return "Quantity must be greater than 0";
+    }
+    return null;
   }, []);
+
+  /**
+   * Validates the symbol selection and returns an error message or null.
+   * Error messages per specs/errors.md:
+   * - Empty symbol: "Select a trading pair"
+   */
+  const validateSymbol = useCallback((sym: string | null): string | null => {
+    if (!sym) {
+      return "Select a trading pair";
+    }
+    return null;
+  }, []);
+
+  // Validate inputs when they change (only after first submit attempt)
+  useEffect(() => {
+    if (!hasAttemptedSubmit) return;
+    setSymbolError(validateSymbol(symbol));
+  }, [symbol, hasAttemptedSubmit, validateSymbol]);
+
+  useEffect(() => {
+    if (!hasAttemptedSubmit) return;
+    setQuantityError(validateQuantity(quantity));
+  }, [quantity, hasAttemptedSubmit, validateQuantity]);
 
   // Check if form is valid for comparison
   const canCompare = useMemo(() => {
@@ -138,7 +206,27 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
 
   // Fetch quotes from API
   const handleCompare = useCallback(async () => {
-    if (!canCompare || !symbol) return;
+    // Mark that user has attempted to submit
+    setHasAttemptedSubmit(true);
+
+    // Validate inputs
+    const symError = validateSymbol(symbol);
+    const qtyError = validateQuantity(quantity);
+
+    setSymbolError(symError);
+    setQuantityError(qtyError);
+
+    // If there are validation errors, focus on the first error field
+    if (symError) {
+      pairSelectorRef.current?.focus();
+      return;
+    }
+    if (qtyError) {
+      quantityInputRef.current?.focus();
+      return;
+    }
+
+    if (!symbol) return;
 
     setIsLoading(true);
     setError(null);
@@ -165,7 +253,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [canCompare, symbol, side, quantity]);
+  }, [symbol, side, quantity, validateSymbol, validateQuantity]);
 
   // Track if auto-fetch has been done
   const autoFetchDone = useRef(false);
@@ -210,10 +298,12 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
             Trading Pair
           </label>
           <PairSelector
+            ref={pairSelectorRef}
             symbols={initialSymbols}
             value={symbol}
             onChange={handleSymbolChange}
             disabled={isLoading}
+            error={symbolError ?? undefined}
           />
         </div>
 
@@ -238,11 +328,13 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
             Quantity
           </label>
           <QuantityInput
+            ref={quantityInputRef}
             value={quantity}
             onChange={handleQuantityChange}
             baseAsset={baseAsset}
             disabled={isLoading}
             presets={[1, 10, 100, 1000]}
+            error={quantityError ?? undefined}
           />
         </div>
 
@@ -250,7 +342,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         <div className="lg:flex-shrink-0">
           <Button
             onClick={handleCompare}
-            disabled={!canCompare || isLoading}
+            disabled={isLoading}
             className="w-full lg:w-auto"
             size="lg"
           >
