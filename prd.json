@@ -152,14 +152,16 @@
       "title": "Implement Coinbase API client",
       "description": "Create lib/exchanges/coinbase.ts with orderbook fetching (GET /products/{symbol}/book?level=2) and stats (GET /products/{symbol}/stats) per specs/exchanges.md. Handle rate limits (10/sec) and response normalization.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "fetchOrderbook returns normalized orderbook (level 2 = top 50)",
         "fetchVolume returns 24h volume from /stats endpoint",
         "Handles rate limit errors with exponential backoff"
       ],
-      "dependencies": ["core-002", "core-003"]
+      "dependencies": ["core-002", "core-003"],
+      "notes": "Created lib/exchanges/coinbase.ts implementing ExchangeClient interface. Uses fetchWithTimeout with 5s timeout, exponential backoff retry for rate limits (HTTP 429), parses level 2 orderbook (top 50 levels) and stats responses. Follows same patterns as Binance client."
     },
     {
       "id": "exchange-003",
