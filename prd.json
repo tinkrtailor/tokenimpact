@@ -136,14 +136,16 @@
       "title": "Implement Binance API client",
       "description": "Create lib/exchanges/binance.ts with orderbook fetching (GET /api/v3/depth?limit=500) and 24h volume (GET /api/v3/ticker/24hr) per specs/exchanges.md. Handle rate limits (1200/min), error responses, and response normalization.",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "fetchOrderbook returns normalized orderbook with 100+ levels",
         "fetchVolume returns 24h volume in base currency",
         "Handles rate limit errors with exponential backoff (max 3 retries)"
       ],
-      "dependencies": ["core-002", "core-003"]
+      "dependencies": ["core-002", "core-003"],
+      "notes": "Created lib/exchanges/binance.ts implementing ExchangeClient interface. Uses fetchWithTimeout with 5s timeout, exponential backoff retry for rate limits (HTTP 429/418), parses orderbook and 24hr ticker responses. Converts native symbols via toExchangeSymbol."
     },
     {
       "id": "exchange-002",
