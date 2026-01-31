@@ -21,7 +21,9 @@ export type AnalyticsEvent =
   | "affiliate_click"
   | "copy_link"
   | "symbol_selected"
-  | "direction_changed";
+  | "direction_changed"
+  | "quick_start_clicked"
+  | "popular_pair_clicked";
 
 /** Event properties type compatible with Vercel Analytics */
 type EventProperties = Record<string, string | number | boolean | undefined>;

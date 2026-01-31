@@ -7,6 +7,7 @@ import {
 import { getSymbolCatalog } from "@/lib/symbol-catalog";
 import { Calculator } from "@/components/calculator";
 import { AdSlot } from "@/components/ad-slot";
+import { HeroSection } from "@/components/hero-section";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PageProps {
@@ -67,6 +68,9 @@ export default function Home() {
           Compare price impact across exchanges
         </p>
       </header>
+
+      {/* Hero Section */}
+      <HeroSection />
 
       {/* Top Banner Ad */}
       <div className="mb-8 flex justify-center">

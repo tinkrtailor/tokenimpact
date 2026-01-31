@@ -10,6 +10,7 @@ import { ExchangeCard } from "@/components/exchange-card";
 import { ResultsTable } from "@/components/results-table";
 import { ExchangeCardSkeleton } from "@/components/exchange-card-skeleton";
 import { ResultsTableSkeleton } from "@/components/results-table-skeleton";
+import { EmptyState } from "@/components/empty-state";
 import { AdSlot } from "@/components/ad-slot";
 import { Button } from "@/components/ui/button";
 import type { Side } from "@/lib/calculations";
@@ -329,18 +330,32 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     return () => clearInterval(interval);
   }, [fetchedAt, quoteResult]);
 
-  // Track if auto-fetch has been done
-  // Initialize to true if URL params were not present on mount (prevents auto-fetch during manual entry)
-  const autoFetchDone = useRef(!(urlParams.s && urlParams.qty));
+  // Track last auto-fetched params to prevent duplicate fetches
+  const lastAutoFetchParams = useRef<string | null>(null);
 
-  // Auto-fetch on initial load if URL has valid params
+  // Auto-fetch when URL has valid params (initial load or quick-start)
   useEffect(() => {
-    if (autoFetchDone.current) return;
-    if (urlParams.s && urlParams.qty && canCompare && !quoteResult && !isLoading) {
-      autoFetchDone.current = true;
+    // Create a key for current params
+    const paramsKey = urlParams.s && urlParams.qty
+      ? `${urlParams.s}:${urlParams.side}:${urlParams.qty}`
+      : null;
+
+    // Skip if no params, already fetched these params, or currently loading
+    if (!paramsKey || lastAutoFetchParams.current === paramsKey || isLoading) {
+      return;
+    }
+
+    // Skip if we already have results (user manually compared)
+    if (quoteResult && !urlParams.s) {
+      return;
+    }
+
+    // Sync URL params to state and trigger fetch
+    if (urlParams.s && urlParams.qty && canCompare) {
+      lastAutoFetchParams.current = paramsKey;
       void handleCompare();
     }
-  }, [urlParams.s, urlParams.qty, canCompare, quoteResult, isLoading, handleCompare]);
+  }, [urlParams.s, urlParams.side, urlParams.qty, canCompare, quoteResult, isLoading, handleCompare]);
 
   // Handle Copy Link
   const handleCopyLink = useCallback(async () => {
@@ -550,12 +565,14 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
 
         {/* Empty State */}
         {!quoteResult && !isLoading && !error && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              Select a trading pair, enter a quantity, and click Compare Prices
-              to see price impact across exchanges.
-            </p>
-          </div>
+          <EmptyState
+            onPairSelect={() => {
+              // Focus quantity input after pair selection
+              setTimeout(() => {
+                quantityInputRef.current?.focus();
+              }, 100);
+            }}
+          />
         )}
 
         {/* Results Bottom Ad (shown after results) */}
