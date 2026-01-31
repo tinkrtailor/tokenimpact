@@ -51,7 +51,7 @@ export function PopularPairs({ className, onPairSelect }: PopularPairsProps) {
   return (
     <div className={className}>
       <p className="text-sm text-muted-foreground mb-3">Popular pairs:</p>
-      <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-2 pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="flex flex-wrap justify-center md:grid md:grid-cols-4 gap-2">
         {POPULAR_PAIRS.map((pair) => (
           <button
             key={pair.symbol}

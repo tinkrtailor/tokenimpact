@@ -77,20 +77,12 @@ export default function Home() {
         <AdSlot slotId="top-banner" />
       </div>
 
-      {/* Main Content with Sidebar */}
-      <div className="flex gap-8 justify-center">
-        {/* Calculator */}
-        <div className="flex-1 max-w-4xl">
-          <Suspense fallback={<CalculatorSkeleton />}>
-            <Calculator initialSymbols={symbols} />
-          </Suspense>
-        </div>
-
-        {/* Sidebar Ad (desktop only) */}
-        <aside className="flex-shrink-0">
-          <AdSlot slotId="sidebar" className="sticky top-8" />
-        </aside>
-      </div>
+      {/* Main Content */}
+      <main id="main-content" className="max-w-4xl mx-auto">
+        <Suspense fallback={<CalculatorSkeleton />}>
+          <Calculator initialSymbols={symbols} />
+        </Suspense>
+      </main>
     </div>
   );
 }
