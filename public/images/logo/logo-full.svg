@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" width="200" height="40">
+  <!-- Logo text with accent on "o" -->
+  <text x="0" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#fafafa">
+    <tspan>T</tspan><tspan fill="#22d3ee">o</tspan><tspan>ken Impact</tspan>
+  </text>
+</svg>
