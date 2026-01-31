@@ -50,7 +50,9 @@ export function PopularPairs({ className, onPairSelect }: PopularPairsProps) {
 
   return (
     <div className={className}>
-      <p className="text-sm text-muted-foreground mb-3">Popular pairs:</p>
+      <p className="text-sm text-muted-foreground/70 mb-3 uppercase tracking-wider font-medium">
+        Popular pairs
+      </p>
       <div className="flex flex-wrap justify-center md:grid md:grid-cols-4 gap-2">
         {POPULAR_PAIRS.map((pair) => (
           <button
@@ -60,10 +62,12 @@ export function PopularPairs({ className, onPairSelect }: PopularPairsProps) {
           >
             <Badge
               variant="secondary"
-              className="px-3 py-2 cursor-pointer hover:bg-accent transition-colors flex items-center gap-2"
+              className="px-4 py-2.5 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
             >
-              <span className="font-medium">{pair.symbol.split("-")[0]}</span>
-              <span className="text-xs text-muted-foreground">
+              <span className="font-semibold text-foreground group-hover:text-accent-foreground">
+                {pair.symbol.split("-")[0]}
+              </span>
+              <span className="text-xs text-muted-foreground group-hover:text-accent-foreground/70">
                 {pair.exchanges} exchanges
               </span>
             </Badge>

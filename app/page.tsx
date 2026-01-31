@@ -60,11 +60,11 @@ export default function Home() {
   return (
     <div className="min-h-screen py-8 px-4 md:px-8">
       {/* Header */}
-      <header className="text-center mb-8 md:mb-12">
-        <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
+      <header className="text-center mb-6 md:mb-10">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
           Token Impact
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-3 text-lg text-muted-foreground font-light tracking-wide">
           Compare price impact across exchanges
         </p>
       </header>

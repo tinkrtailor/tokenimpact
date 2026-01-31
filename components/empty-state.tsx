@@ -14,13 +14,13 @@ interface EmptyStateProps {
  */
 export function EmptyState({ onPairSelect }: EmptyStateProps) {
   return (
-    <div className="py-8 space-y-6">
+    <div className="py-10 space-y-8">
       {/* Educational blurb */}
-      <div className="text-center max-w-lg mx-auto">
-        <h3 className="text-lg font-medium text-foreground mb-2">
+      <div className="text-center max-w-md mx-auto">
+        <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-3 tracking-tight">
           What is Price Impact?
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground leading-relaxed">
           When you trade large amounts, your order consumes liquidity from the
           order book and moves the price. Compare how much slippage you&apos;ll
           experience across different exchanges.

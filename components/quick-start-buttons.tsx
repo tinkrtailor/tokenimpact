@@ -47,16 +47,17 @@ export function QuickStartButtons({ className }: QuickStartButtonsProps) {
 
   return (
     <div className={className}>
-      <p className="text-sm text-muted-foreground mb-3">
-        Try a quick comparison:
+      <p className="text-sm text-muted-foreground/70 mb-3 uppercase tracking-wider font-medium">
+        Try a quick comparison
       </p>
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="flex flex-wrap justify-center gap-3">
         {QUICK_STARTS.map((config) => (
           <Button
             key={config.symbol}
             variant="outline"
-            size="sm"
+            size="default"
             onClick={() => handleClick(config)}
+            className="font-medium"
           >
             {config.label}
           </Button>
