@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-002 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -251,14 +251,16 @@
       "title": "Implement rate limiting middleware",
       "description": "Create rate limiting for API endpoints per specs/api.md: /symbols (60/min), /quote (30/min), /health (10/min). Use IP-based limiting. Include X-RateLimit-* headers in responses.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "/quote endpoint returns 429 after 30 requests in 1 minute",
         "Response includes X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset headers",
         "Rate limits are per-IP"
       ],
-      "dependencies": ["api-001", "api-002", "api-003"]
+      "dependencies": ["api-001", "api-002", "api-003"],
+      "notes": "Created lib/rate-limit.ts with sliding window algorithm for IP-based rate limiting. Created middleware.ts that intercepts /api/* routes, checks rate limits, returns 429 with Retry-After header when exceeded, and adds X-RateLimit-* headers to all API responses."
     },
     {
       "id": "ui-001",

@@ -25,6 +25,8 @@ export const ErrorCode = {
   EXCHANGE_ERROR: 'E_EXCHANGE_ERROR',
   /** Exchange rate limited */
   EXCHANGE_RATE_LIMIT: 'E_EXCHANGE_RATE_LIMIT',
+  /** Client rate limited */
+  RATE_LIMITED: 'E_RATE_LIMITED',
   /** Network request failed */
   NETWORK: 'E_NETWORK',
   /** Response parse error */
