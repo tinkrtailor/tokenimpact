@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002, perf-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -652,7 +652,8 @@
       "title": "Optimize Core Web Vitals",
       "description": "Optimize for LCP < 2.0s, FID < 100ms, CLS < 0.1 per specs/nfr.md. Preload fonts, lazy load ads, reserve space for dynamic content.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "polish",
       "verification": [
         "Lighthouse performance score > 90",
@@ -660,7 +661,8 @@
         "CLS < 0.1 (no layout shift from ads)",
         "FID < 100ms"
       ],
-      "dependencies": ["ui-007"]
+      "dependencies": ["ui-007"],
+      "notes": "Added DNS prefetch and preconnect hints for all exchange APIs (Binance, Coinbase, Kraken) to reduce connection latency. Fixed duplicate <main> element issue (layout has semantic main, page now uses div). Fonts already preloaded via Next.js font optimization. Ads already use fixed dimensions via ad-slot.tsx to prevent CLS. Server Components used by default minimizes FID."
     },
     {
       "id": "deploy-001",

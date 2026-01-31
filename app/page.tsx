@@ -56,7 +56,7 @@ export default function Home() {
   const symbols = getSymbolCatalog();
 
   return (
-    <main className="min-h-screen py-8 px-4 md:px-8">
+    <div className="min-h-screen py-8 px-4 md:px-8">
       {/* Header */}
       <header className="text-center mb-8 md:mb-12">
         <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
@@ -71,6 +71,6 @@ export default function Home() {
       <Suspense fallback={<CalculatorSkeleton />}>
         <Calculator initialSymbols={symbols} />
       </Suspense>
-    </main>
+    </div>
   );
 }

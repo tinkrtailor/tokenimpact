@@ -119,6 +119,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
+        {/* DNS prefetch for exchange APIs */}
+        <link rel="dns-prefetch" href="https://api.binance.com" />
+        <link rel="dns-prefetch" href="https://api.coinbase.com" />
+        <link rel="dns-prefetch" href="https://api.kraken.com" />
+
+        {/* Preconnect for frequently used origins */}
+        <link rel="preconnect" href="https://api.binance.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://api.coinbase.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://api.kraken.com" crossOrigin="anonymous" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
