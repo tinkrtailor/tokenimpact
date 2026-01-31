@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -71,7 +71,8 @@
       "title": "Implement price impact calculation engine",
       "description": "Create lib/calculations.ts with orderbook walking algorithm per specs/core.md. Must calculate avgFillPrice, totalCost, priceImpact, depthConsumed, fillable, and shortfall. Handle BUY (walk asks low→high) and SELL (walk bids high→low) correctly.",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "calculatePriceImpact function handles BUY orders correctly (walks asks)",
@@ -79,7 +80,8 @@
         "Returns fillable: false with shortfall when orderbook depth insufficient",
         "priceImpact formula is ((avgFillPrice - midPrice) / midPrice) * 100"
       ],
-      "dependencies": ["setup-001"]
+      "dependencies": ["setup-001"],
+      "notes": "Implemented calculatePriceImpact function in lib/calculations.ts. Handles BUY (walks asks) and SELL (walks bids), edge cases for empty orderbook and zero quantity, returns shortfall for insufficient liquidity."
     },
     {
       "id": "core-002",
