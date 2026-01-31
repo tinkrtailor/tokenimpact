@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -40,14 +40,16 @@
       "title": "Create project structure directories",
       "description": "Create app/, components/, components/ui/, lib/, lib/exchanges/, public/logos/ directories matching PRODUCT.md structure",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "setup",
       "verification": [
         "All directories from PRODUCT.md exist",
         "lib/exchanges/ directory is present",
         "public/logos/ directory is present"
       ],
-      "dependencies": ["setup-001"]
+      "dependencies": ["setup-001"],
+      "notes": "Created lib/exchanges/ and public/logos/ directories. Other directories (app/, components/, components/ui/, lib/) already existed from setup-001 and setup-002. Added .gitkeep files to track empty directories."
     },
     {
       "id": "setup-004",
