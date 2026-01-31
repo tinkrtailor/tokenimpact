@@ -329,7 +329,8 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
   }, [fetchedAt, quoteResult]);
 
   // Track if auto-fetch has been done
-  const autoFetchDone = useRef(false);
+  // Initialize to true if URL params were not present on mount (prevents auto-fetch during manual entry)
+  const autoFetchDone = useRef(!(urlParams.s && urlParams.qty));
 
   // Auto-fetch on initial load if URL has valid params
   useEffect(() => {
