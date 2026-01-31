@@ -40,6 +40,9 @@ function formatNumber(value: number, minDecimals = 2): string {
   return value.toFixed(minDecimals);
 }
 
+/** Threshold for stale data in milliseconds (5 seconds per specs/core.md) */
+const STALE_THRESHOLD_MS = 5000;
+
 /**
  * Converts raw orderbook data to the format expected by calculatePriceImpact.
  */
@@ -65,6 +68,16 @@ function convertOrderbook(raw: {
 }
 
 /**
+ * Determines if orderbook data is stale (>5s old) per specs/core.md.
+ * @param orderbookTimestamp - Timestamp of the orderbook data
+ * @returns true if data is older than STALE_THRESHOLD_MS
+ */
+function isDataStale(orderbookTimestamp: number): boolean {
+  const now = Date.now();
+  return now - orderbookTimestamp > STALE_THRESHOLD_MS;
+}
+
+/**
  * Processes a successful exchange result into an ExchangeQuote.
  */
 function processSuccessfulResult(
@@ -81,6 +94,9 @@ function processSuccessfulResult(
     orderbook,
     volume24h: data.volume24h,
   });
+
+  // Check if orderbook data is stale (>5s old) per specs/core.md
+  const stale = isDataStale(data.orderbook.timestamp);
 
   return {
     exchange: data.exchange,
@@ -99,6 +115,7 @@ function processSuccessfulResult(
     fillable: impactResult.fillable,
     shortfall: impactResult.shortfall > 0 ? formatNumber(impactResult.shortfall) : undefined,
     affiliateUrl: getAffiliateUrl(data.exchange),
+    stale,
   };
 }
 

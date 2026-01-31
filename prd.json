@@ -1,7 +1,7 @@
 {
   "version": 4,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Session 15 (2026-01-31): Completed test-003 (E2E Playwright testing suite). 3 tasks remaining: api-005, api-006, seo-005. Critical path: seo-005 (SEO comparison pages) before release.",
+  "planningNotes": "Session 16 (2026-01-31): Completed api-006 (data freshness flag). 2 tasks remaining: api-005, seo-005. Critical path: seo-005 (SEO comparison pages) before release.",
   "tasks": [
     {
       "id": "setup-001",
@@ -783,14 +783,16 @@
       "title": "Add data freshness flag to quote response",
       "description": "Per specs/core.md line 64, stale data (>5s) should be flagged in response. Add 'stale' boolean field to quote response when orderbook timestamp is older than 5 seconds.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "/api/quote response includes 'stale' field per exchange",
         "stale=true when orderbook.timestamp > 5 seconds old",
         "Response schema updated in lib/validation.ts"
       ],
-      "dependencies": ["api-002"]
+      "dependencies": ["api-002"],
+      "notes": "Added stale boolean field to ExchangeQuote interface in lib/exchanges/types.ts. Added stale field to ExchangeQuoteSchema in lib/validation.ts. Implemented isDataStale() function in app/api/quote/route.ts with 5s threshold. Added 4 unit tests covering fresh data, stale data, boundary case, and per-exchange staleness."
     },
     {
       "id": "seo-005",

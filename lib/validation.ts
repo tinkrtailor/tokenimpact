@@ -165,6 +165,7 @@ export const ExchangeQuoteSchema = z.object({
   fillable: z.boolean().optional(),
   shortfall: z.string().optional(),
   affiliateUrl: z.string().url().optional(),
+  stale: z.boolean().optional(),
 });
 
 export type ExchangeQuoteResponse = z.infer<typeof ExchangeQuoteSchema>;

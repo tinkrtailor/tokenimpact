@@ -491,4 +491,161 @@ describe('GET /api/quote', () => {
       expect(response.headers.get('Cache-Control')).toBe('no-store');
     });
   });
+
+  describe('data freshness', () => {
+    it('returns stale=false for fresh data (<5s old)', async () => {
+      vi.mocked(fetchAllExchanges).mockResolvedValue({
+        results: [createSuccessfulResult('binance')], // timestamp is Date.now() by default
+        successCount: 1,
+        timestamp: Date.now(),
+      });
+
+      const request = createRequest({
+        symbol: 'BTC-USD',
+        side: 'BUY',
+        quantity: '1',
+      });
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      const body = await response.json();
+
+      expect(body.results[0].stale).toBe(false);
+    });
+
+    it('returns stale=true for stale data (>5s old)', async () => {
+      const staleTimestamp = Date.now() - 6000; // 6 seconds ago
+
+      vi.mocked(fetchAllExchanges).mockResolvedValue({
+        results: [
+          {
+            success: true as const,
+            exchange: 'binance' as const,
+            data: {
+              exchange: 'binance' as const,
+              symbol: 'BTC-USD',
+              orderbook: {
+                bids: [[49000, 100]] as Array<[number, number]>,
+                asks: [[49100, 100]] as Array<[number, number]>,
+                timestamp: staleTimestamp,
+              },
+              volume24h: 10000,
+            },
+          },
+        ],
+        successCount: 1,
+        timestamp: Date.now(),
+      });
+
+      const request = createRequest({
+        symbol: 'BTC-USD',
+        side: 'BUY',
+        quantity: '1',
+      });
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      const body = await response.json();
+
+      expect(body.results[0].stale).toBe(true);
+    });
+
+    it('returns stale=false for data exactly 5s old', async () => {
+      const exactlyFiveSecondsAgo = Date.now() - 5000;
+
+      vi.mocked(fetchAllExchanges).mockResolvedValue({
+        results: [
+          {
+            success: true as const,
+            exchange: 'binance' as const,
+            data: {
+              exchange: 'binance' as const,
+              symbol: 'BTC-USD',
+              orderbook: {
+                bids: [[49000, 100]] as Array<[number, number]>,
+                asks: [[49100, 100]] as Array<[number, number]>,
+                timestamp: exactlyFiveSecondsAgo,
+              },
+              volume24h: 10000,
+            },
+          },
+        ],
+        successCount: 1,
+        timestamp: Date.now(),
+      });
+
+      const request = createRequest({
+        symbol: 'BTC-USD',
+        side: 'BUY',
+        quantity: '1',
+      });
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      const body = await response.json();
+
+      // 5s is the boundary, not stale yet (>5s is stale)
+      expect(body.results[0].stale).toBe(false);
+    });
+
+    it('includes stale field for each exchange result', async () => {
+      const freshTimestamp = Date.now();
+      const staleTimestamp = Date.now() - 10000; // 10 seconds ago
+
+      vi.mocked(fetchAllExchanges).mockResolvedValue({
+        results: [
+          {
+            success: true as const,
+            exchange: 'binance' as const,
+            data: {
+              exchange: 'binance' as const,
+              symbol: 'BTC-USD',
+              orderbook: {
+                bids: [[49000, 100]] as Array<[number, number]>,
+                asks: [[49100, 100]] as Array<[number, number]>,
+                timestamp: freshTimestamp,
+              },
+              volume24h: 10000,
+            },
+          },
+          {
+            success: true as const,
+            exchange: 'coinbase' as const,
+            data: {
+              exchange: 'coinbase' as const,
+              symbol: 'BTC-USD',
+              orderbook: {
+                bids: [[49000, 100]] as Array<[number, number]>,
+                asks: [[49100, 100]] as Array<[number, number]>,
+                timestamp: staleTimestamp,
+              },
+              volume24h: 10000,
+            },
+          },
+        ],
+        successCount: 2,
+        timestamp: Date.now(),
+      });
+
+      const request = createRequest({
+        symbol: 'BTC-USD',
+        side: 'BUY',
+        quantity: '1',
+      });
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      const body = await response.json();
+
+      const binanceResult = body.results.find(
+        (r: { exchange: string }) => r.exchange === 'binance'
+      );
+      const coinbaseResult = body.results.find(
+        (r: { exchange: string }) => r.exchange === 'coinbase'
+      );
+
+      expect(binanceResult.stale).toBe(false);
+      expect(coinbaseResult.stale).toBe(true);
+    });
+  });
 });

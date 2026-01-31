@@ -74,6 +74,8 @@ export interface ExchangeQuote {
   shortfall?: string;
   /** Affiliate signup URL for the exchange */
   affiliateUrl?: string;
+  /** Whether orderbook data is stale (>5s old) per specs/core.md */
+  stale?: boolean;
 }
 
 /**
