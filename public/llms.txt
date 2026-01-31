@@ -1,0 +1,31 @@
+# Token Impact
+
+## Description
+Token Impact is a free web tool that calculates price impact (slippage) for cryptocurrency trades across multiple exchanges. It compares real-time orderbook depth on Binance, Coinbase, and Kraken to show users which exchange offers the best execution price for their trade size.
+
+## Use Cases
+- Calculate expected slippage on large crypto orders
+- Compare liquidity depth across exchanges
+- Find the best exchange for a specific trade size
+- Estimate true cost of market orders
+
+## How It Works
+1. User selects a trading pair (e.g., BTC-USD)
+2. User enters trade size and direction (buy/sell)
+3. Tool fetches real-time orderbook data from each exchange
+4. Tool calculates weighted average fill price by walking the orderbook
+5. Tool displays price impact percentage and total cost comparison
+
+## Supported Exchanges
+- Binance
+- Coinbase
+- Kraken
+
+## URL
+https://tokenimpact.com
+
+## API
+Public API available at https://tokenimpact.com/api
+- GET /api/symbols - List available trading pairs
+- GET /api/quote - Calculate price impact for a trade
+- GET /api/health - Check exchange connectivity status
