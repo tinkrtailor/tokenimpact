@@ -15,6 +15,7 @@ import type { Side } from "@/lib/calculations";
 import type { QuoteResponse, SymbolInfo, ExchangeId } from "@/lib/exchanges/types";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent, reportError } from "@/lib/analytics";
 
 /** URL state schema for nuqs */
 const urlStateSchema = {
@@ -235,6 +236,9 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     setIsLoading(true);
     setError(null);
 
+    // Track quote request
+    trackEvent("quote_requested", { symbol, side, quantity });
+
     try {
       const params = new URLSearchParams({
         symbol,
@@ -255,6 +259,15 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
       setFetchedAt(Date.now());
       setIsStale(false);
 
+      // Track successful quote
+      const successCount = quoteData.results.filter((r) => r.status === "ok").length;
+      trackEvent("quote_succeeded", {
+        symbol,
+        side,
+        quantity,
+        exchangeCount: successCount
+      });
+
       // Show toast for exchange warnings (timeout, error, unavailable)
       const slowExchanges = quoteData.results
         .filter((r) => r.status === "timeout")
@@ -262,6 +275,11 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
       const errorExchanges = quoteData.results
         .filter((r) => r.status === "error" || r.status === "unavailable")
         .map((r) => r.exchange);
+
+      // Track exchange timeouts
+      slowExchanges.forEach((exchange) => {
+        trackEvent("exchange_timeout", { exchange, symbol });
+      });
 
       if (slowExchanges.length > 0) {
         toast({
@@ -275,10 +293,15 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         });
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      const errorMessage = err instanceof Error ? err.message : "An error occurred";
+      setError(errorMessage);
       setQuoteResult(null);
       setFetchedAt(null);
       setIsStale(false);
+
+      // Track and report error
+      trackEvent("quote_failed", { symbol, side, quantity });
+      reportError(err, { symbol, side, quantity });
     } finally {
       setIsLoading(false);
     }
@@ -323,6 +346,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
       await navigator.clipboard.writeText(window.location.href);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
+      trackEvent("copy_link", { path: window.location.pathname + window.location.search });
     } catch {
       // Fallback for browsers without clipboard API
       setError("Failed to copy link");
@@ -331,9 +355,13 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
 
   // Handle trade click tracking
   const handleTradeClick = useCallback((exchange: ExchangeId) => {
-    // Could add analytics tracking here
-    console.log("Trade clicked:", exchange);
-  }, []);
+    trackEvent("affiliate_click", {
+      exchange,
+      symbol: symbol ?? undefined,
+      side,
+      quantity: quantity || undefined,
+    });
+  }, [symbol, side, quantity]);
 
   return (
     <div className={cn("w-full max-w-4xl mx-auto", className)}>

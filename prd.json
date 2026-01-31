@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002, perf-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002, perf-001, monitor-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -685,14 +685,16 @@
       "title": "Set up error tracking and analytics",
       "description": "Integrate Vercel Analytics for performance monitoring per specs/nfr.md. Consider Sentry for error tracking. Add anonymous session tracking for monetization metrics.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "polish",
       "verification": [
         "Vercel Analytics dashboard shows traffic",
         "Errors are captured and reported",
         "Affiliate click tracking works"
       ],
-      "dependencies": ["deploy-001"]
+      "dependencies": ["deploy-001"],
+      "notes": "Integrated @vercel/analytics and @vercel/speed-insights in layout.tsx for automatic traffic and performance monitoring. Created lib/analytics.ts with trackEvent() and reportError() utilities. Added event tracking in Calculator for: quote_requested, quote_succeeded, quote_failed, exchange_timeout, affiliate_click, copy_link. Error reporting logs context in development and can be extended to Sentry later."
     },
     {
       "id": "test-001",

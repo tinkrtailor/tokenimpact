@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { OfflineBanner } from "@/components/offline-banner";
@@ -156,6 +158,8 @@ export default function RootLayout({
           <Footer />
           <Toaster />
         </NuqsAdapter>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
