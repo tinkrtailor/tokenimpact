@@ -56,13 +56,15 @@
       "title": "Install core dependencies",
       "description": "Install @tanstack/react-query, zod, nuqs, lucide-react. These are required for data fetching, validation, URL state, and icons per PRODUCT.md tech stack.",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "setup",
       "verification": [
         "package.json contains @tanstack/react-query, zod, nuqs, lucide-react",
         "npm run build succeeds after installation"
       ],
-      "dependencies": ["setup-001"]
+      "dependencies": ["setup-001"],
+      "notes": "Installed @tanstack/react-query@5.90.20, zod@4.3.6, nuqs@2.8.7 via npm. lucide-react was already installed from setup-002."
     },
     {
       "id": "core-001",
