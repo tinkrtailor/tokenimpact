@@ -137,22 +137,24 @@ Beyond the calculator, include SEO-driven content:
 | `/methodology` | How we calculate, data sources | how to calculate slippage |
 | `/faq` | Common questions | long-tail queries |
 
-### Comparison Landing Pages
+### Exchange Comparison Landing Pages (REQUIRED)
 
-High-value exchange comparison pages at `/compare/[pair]`:
+**IMPORTANT: These are static SEO pages comparing exchanges, NOT the dynamic `/compare/[pair]` trading pair route.**
 
-| Page | Target Keywords |
-|------|-----------------|
+Create these three exchange-vs-exchange comparison pages:
+
+| Route | Target Keywords |
+|-------|-----------------|
 | `/compare/binance-vs-coinbase` | binance vs coinbase liquidity, binance vs coinbase for large trades |
 | `/compare/binance-vs-kraken` | binance vs kraken, best exchange for crypto |
 | `/compare/coinbase-vs-kraken` | coinbase vs kraken liquidity |
 
-Each page includes:
-- ~500 words unique comparison content
+Each page MUST include:
+- ~500 words unique comparison content (not generated, hand-written SEO copy)
 - FAQPage structured data
 - Breadcrumb navigation
 - CTA to calculator
-- Links to other comparisons
+- Links to other comparison pages
 
 ### Token Landing Pages
 
