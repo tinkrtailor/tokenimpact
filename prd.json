@@ -201,7 +201,8 @@
       "title": "Implement GET /api/symbols endpoint",
       "description": "Create app/api/symbols/route.ts returning available trading pairs with exchange availability per specs/api.md. Support query params: quote, exchange, search, limit. Cache response for 1 hour.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "GET /api/symbols returns list of normalized symbols",
@@ -209,7 +210,8 @@
         "?search=BTC matches BTC-USD, ETH-BTC, etc.",
         "Response includes Cache-Control: max-age=3600 header"
       ],
-      "dependencies": ["core-003", "core-004"]
+      "dependencies": ["core-003", "core-004"],
+      "notes": "Created lib/symbol-catalog.ts with curated catalog of 69 trading pairs with exchange availability. Implemented app/api/symbols/route.ts with filtering by quote, exchange, and search. In-memory caching with 1-hour TTL. Response includes Cache-Control: public, max-age=3600 header."
     },
     {
       "id": "api-002",
