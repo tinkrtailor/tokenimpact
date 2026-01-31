@@ -410,17 +410,22 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
 
       {/* Results Section */}
       <div className="mt-8">
-        {/* Error State */}
+        {/* Full-page Error State */}
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
-            <p className="text-sm text-destructive">{error}</p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCompare}
-              className="mt-2"
-            >
-              Try Again
+          <div className="flex min-h-[300px] flex-col items-center justify-center p-8 text-center">
+            <AlertTriangle
+              className="h-12 w-12 text-amber-500 mb-4"
+              aria-hidden="true"
+            />
+            <h2 className="text-xl font-semibold text-foreground mb-2">
+              Unable to fetch prices
+            </h2>
+            <p className="text-muted-foreground mb-6 max-w-md">
+              {error}
+            </p>
+            <Button onClick={handleCompare} className="gap-2">
+              <Loader2 className={cn("h-4 w-4", isLoading ? "animate-spin" : "hidden")} />
+              {isLoading ? "Retrying..." : "Try Again"}
             </Button>
           </div>
         )}

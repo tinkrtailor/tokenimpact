@@ -4,6 +4,8 @@ import { GeistMono } from "geist/font/mono";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { OfflineBanner } from "@/components/offline-banner";
+import { ErrorBoundary } from "@/components/error-boundary";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokenimpact.com";
@@ -131,8 +133,11 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col bg-background font-sans antialiased">
+        <OfflineBanner />
         <NuqsAdapter>
-          <div className="flex-1">{children}</div>
+          <ErrorBoundary>
+            <div className="flex-1">{children}</div>
+          </ErrorBoundary>
           <Footer />
           <Toaster />
         </NuqsAdapter>

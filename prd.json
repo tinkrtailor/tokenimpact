@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -601,7 +601,8 @@
       "title": "Implement full-page error and offline states",
       "description": "Create error boundary and offline banner per specs/errors.md. Full-page error with retry button when all exchanges fail. Persistent offline banner at top that auto-dismisses on reconnect.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Full-page error shows when all exchanges fail with retry button",
@@ -609,7 +610,8 @@
         "Offline banner dismisses automatically when connection restored",
         "Error boundary catches React errors and shows recovery UI"
       ],
-      "dependencies": ["ui-007"]
+      "dependencies": ["ui-007"],
+      "notes": "Created OfflineBanner component with online/offline event listeners, auto-dismisses on reconnect. Created ErrorBoundary class component catching React errors with recovery UI. Updated Calculator to show full-page error (centered layout with icon and retry button) when API fails. Added components to layout.tsx."
     },
     {
       "id": "a11y-001",
