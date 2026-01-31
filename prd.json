@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, monetization-001, error-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, monetization-001, error-001, test-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -667,7 +667,8 @@
       "title": "Create unit tests for calculation engine",
       "description": "Write unit tests for lib/calculations.ts per testing-philosophy.md. Cover BUY/SELL logic, partial fills, insufficient liquidity, edge cases (zero quantity, empty orderbook).",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "Tests cover BUY order calculation (walks asks)",
@@ -675,7 +676,8 @@
         "Tests verify fillable: false when orderbook insufficient",
         "Edge cases tested: zero quantity, empty orderbook, single level"
       ],
-      "dependencies": ["core-001"]
+      "dependencies": ["core-001"],
+      "notes": "Installed Vitest test framework (vitest@4.0.18) and created lib/calculations.test.ts with 25 comprehensive unit tests. Tests cover: BUY orders (walks asks, multiple levels, partial fills, volume %), SELL orders (walks bids, multiple levels, partial fills, volume %), insufficient liquidity (shortfall for BUY/SELL), and edge cases (zero quantity, empty orderbook, single level fills, volume % edge cases, price precision, depth consumed accuracy). All tests pass."
     },
     {
       "id": "test-002",

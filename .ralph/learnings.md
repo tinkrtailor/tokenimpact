@@ -23,6 +23,7 @@ Discoveries about the codebase that future iterations should know.
 - `zod` - Runtime validation schemas
 - `nuqs` - URL state for shareable links
 - `lucide-react` - Icons (included with shadcn)
+- `vitest` - Unit testing framework (dev dependency)
 
 ## Exchange APIs
 
@@ -324,4 +325,6 @@ Discoveries about the codebase that future iterations should know.
 npm run dev          # Start dev server (port 3000)
 npm run build        # Production build
 npm run lint         # ESLint
+npm run test         # Run unit tests (vitest)
+npm run test:watch   # Run tests in watch mode
 ```
