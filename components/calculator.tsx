@@ -94,12 +94,11 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     if (okResults.length < 2) return 0;
 
     const costs = okResults.map((r) => parseFloat(r.totalCost ?? "0"));
-    const bestCost = Math.min(...costs);
-    const worstCost = Math.max(...costs);
-
-    // For buys, savings = worst - best; for sells, savings = best - worst
-    return side === "BUY" ? worstCost - bestCost : bestCost - worstCost;
-  }, [quoteResult, side]);
+    // Savings is always the difference between max and min (same for both BUY and SELL)
+    // BUY: you save by paying less (avoid the max)
+    // SELL: you gain by receiving more (get the max)
+    return Math.max(...costs) - Math.min(...costs);
+  }, [quoteResult]);
 
   // Sync URL params to state on initial load or external URL changes (back/forward navigation)
   // Note: We intentionally exclude symbol, quantity, side from deps to prevent circular updates.
@@ -550,9 +549,20 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
               </Button>
             </div>
 
-            {/* Mobile: Exchange Cards */}
+            {/* Mobile: Exchange Cards - sorted by best value (best first) */}
             <div className="space-y-4 lg:hidden">
-              {quoteResult.results.map((quote) => (
+              {[...quoteResult.results]
+                .sort((a, b) => {
+                  // Unavailable exchanges go last
+                  if (a.status !== "ok" && b.status === "ok") return 1;
+                  if (a.status === "ok" && b.status !== "ok") return -1;
+                  if (a.status !== "ok" && b.status !== "ok") return 0;
+                  // Sort by totalCost: ascending for BUY (lowest first), descending for SELL (highest first)
+                  const aCost = parseFloat(a.totalCost ?? "0");
+                  const bCost = parseFloat(b.totalCost ?? "0");
+                  return side === "BUY" ? aCost - bCost : bCost - aCost;
+                })
+                .map((quote) => (
                 <ExchangeCard
                   key={quote.exchange}
                   quote={quote}

@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import type { ExchangeQuote, ExchangeId } from "@/lib/exchanges/types";
 import { cn } from "@/lib/utils";
 import {
@@ -127,7 +127,17 @@ function getSortValue(quote: ExchangeQuote, column: SortColumn): number | string
 const ResultsTable = forwardRef<HTMLTableElement, ResultsTableProps>(
   ({ quotes, bestExchange, side, quoteAsset, onTradeClick, className }, ref) => {
     const [sortColumn, setSortColumn] = useState<SortColumn>("totalCost");
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // For BUY: ascending (lowest cost first). For SELL: descending (highest proceeds first)
+    const [sortDirection, setSortDirection] = useState<SortDirection>(
+      side === "SELL" ? "desc" : "asc"
+    );
+
+    // Reset sort direction when side changes (if still on default column)
+    useEffect(() => {
+      if (sortColumn === "totalCost") {
+        setSortDirection(side === "SELL" ? "desc" : "asc");
+      }
+    }, [side, sortColumn]);
 
     const handleSort = (column: SortColumn) => {
       if (sortColumn === column) {
