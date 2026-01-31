@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import type { Side } from "@/lib/calculations";
 import type { QuoteResponse, SymbolInfo, ExchangeId } from "@/lib/exchanges/types";
 import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 /** URL state schema for nuqs */
 const urlStateSchema = {
@@ -249,9 +250,30 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         throw new Error(errorData.error?.message ?? "Failed to fetch quotes");
       }
 
-      setQuoteResult(data as QuoteResponse);
+      const quoteData = data as QuoteResponse;
+      setQuoteResult(quoteData);
       setFetchedAt(Date.now());
       setIsStale(false);
+
+      // Show toast for exchange warnings (timeout, error, unavailable)
+      const slowExchanges = quoteData.results
+        .filter((r) => r.status === "timeout")
+        .map((r) => r.exchange);
+      const errorExchanges = quoteData.results
+        .filter((r) => r.status === "error" || r.status === "unavailable")
+        .map((r) => r.exchange);
+
+      if (slowExchanges.length > 0) {
+        toast({
+          variant: "warning",
+          description: `${slowExchanges.join(", ")} ${slowExchanges.length === 1 ? "is" : "are"} slow to respond`,
+        });
+      } else if (errorExchanges.length > 0 && errorExchanges.length < quoteData.results.length) {
+        toast({
+          variant: "warning",
+          description: `${errorExchanges.join(", ")} unavailable`,
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setQuoteResult(null);

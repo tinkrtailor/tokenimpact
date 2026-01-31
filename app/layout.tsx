@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokenimpact.com";
@@ -133,6 +134,7 @@ export default function RootLayout({
         <NuqsAdapter>
           <div className="flex-1">{children}</div>
           <Footer />
+          <Toaster />
         </NuqsAdapter>
       </body>
     </html>
