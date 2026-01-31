@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-003 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -317,7 +317,8 @@
       "title": "Implement quantity input component",
       "description": "Create components/quantity-input.tsx with numeric formatting (thousand separators), base asset label suffix, quick preset buttons (1, 10, 100, 1000) per specs/ui.md.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Input displays 1000 as '1,000'",
@@ -325,7 +326,8 @@
         "Quick buttons set predefined values on click",
         "Rejects non-numeric input"
       ],
-      "dependencies": ["setup-002"]
+      "dependencies": ["setup-002"],
+      "notes": "Created components/quantity-input.tsx with formatWithThousandSeparators for number formatting, base asset suffix display, preset buttons (1, 10, 100, 1000), input validation rejecting non-numeric input, and error state support. Uses shadcn/ui Input component as base. Added Input component from shadcn/ui."
     },
     {
       "id": "ui-005",
