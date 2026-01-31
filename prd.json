@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -436,14 +436,16 @@
       "title": "Create sitemap.xml",
       "description": "Create app/sitemap.ts generating XML sitemap per specs/seo.md. Include /, /about, /methodology, /faq pages.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "GET /sitemap.xml returns valid XML sitemap",
         "Includes all public pages with lastmod dates",
         "Priority and changefreq are set appropriately"
       ],
-      "dependencies": ["setup-001"]
+      "dependencies": ["setup-001"],
+      "notes": "Created app/sitemap.ts using Next.js MetadataRoute.Sitemap. Includes homepage (priority 1.0, daily), /about, /methodology (priority 0.8, weekly), and /faq (priority 0.7, weekly). Uses BASE_URL from environment with fallback to tokenimpact.com."
     },
     {
       "id": "seo-002",
