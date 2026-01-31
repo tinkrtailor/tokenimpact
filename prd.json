@@ -235,14 +235,16 @@
       "title": "Implement GET /api/health endpoint",
       "description": "Create app/api/health/route.ts returning exchange connectivity status and latency per specs/api.md. Ping each exchange and report status (ok, degraded, offline) with latency in ms.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "GET /api/health returns status for all three exchanges",
         "Each exchange includes latency in milliseconds",
         "Returns degraded status if latency > 500ms"
       ],
-      "dependencies": ["exchange-004"]
+      "dependencies": ["exchange-004"],
+      "notes": "Created app/api/health/route.ts that pings all three exchanges (using /ping, /time, /Time endpoints) in parallel with Promise.all. Measures latency via performance.now(), returns 'ok' if ≤500ms, 'degraded' if >500ms, 'offline' on failure. Overall status is 'offline' if all fail, 'degraded' if any fail/degrade, 'ok' otherwise. No caching (Cache-Control: no-store)."
     },
     {
       "id": "api-004",
