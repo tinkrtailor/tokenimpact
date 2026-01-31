@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -484,14 +484,16 @@
       "title": "Add structured data (Schema.org)",
       "description": "Add JSON-LD structured data to layout per specs/seo.md. Include WebApplication, Organization schemas. Add FAQPage schema to /faq when created.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Homepage includes WebApplication schema in JSON-LD",
         "Organization schema includes name and logo",
         "Schema validates with Google Rich Results Test"
       ],
-      "dependencies": ["ui-001"]
+      "dependencies": ["ui-001"],
+      "notes": "Added WebApplication and Organization JSON-LD structured data to app/layout.tsx. WebApplication includes name, description, URL, applicationCategory (FinanceApplication), operatingSystem (Web), offers (free), and featureList. Organization includes name, URL, and logo reference to logo-full.svg."
     },
     {
       "id": "page-001",

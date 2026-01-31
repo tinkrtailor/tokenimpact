@@ -75,6 +75,38 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+// Structured data for SEO
+const webApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Token Impact",
+  description:
+    "Crypto price impact calculator comparing liquidity across exchanges",
+  url: siteUrl,
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  featureList: [
+    "Real-time orderbook analysis",
+    "Multi-exchange comparison",
+    "Price impact calculation",
+    "Slippage estimation",
+  ],
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Token Impact",
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo/logo-full.svg`,
+  sameAs: [],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -82,6 +114,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(webApplicationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <NuqsAdapter>{children}</NuqsAdapter>
       </body>
