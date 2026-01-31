@@ -24,6 +24,8 @@ Discoveries about the codebase that future iterations should know.
 - `nuqs` - URL state for shareable links
 - `lucide-react` - Icons (included with shadcn)
 - `vitest` - Unit testing framework (dev dependency)
+- `@playwright/test` - E2E testing framework (dev dependency)
+- `@axe-core/playwright` - Accessibility testing for Playwright (dev dependency)
 
 ## Exchange APIs
 
@@ -80,9 +82,9 @@ Discoveries about the codebase that future iterations should know.
 
 ## Implementation Status
 
-- **Completed Tasks**: 45/48
-- **Project Status**: Implementation complete, E2E testing required
-- **Next Step**: test-003 (E2E testing suite with Playwright)
+- **Completed Tasks**: 46/48
+- **Project Status**: E2E tests complete, 3 tasks remaining (api-005, api-006, seo-005)
+- **Next Step**: api-006 (Data freshness flag) or seo-005 (Exchange comparison pages)
 - **Planning Session 1**: 2026-01-30 validated all 41 tasks against 8 spec files
 - **Planning Session 2**: 2026-01-30 added 3 error handling tasks (error-001, error-002, error-003)
 - **Planning Session 3**: 2026-01-30 validated all 44 tasks against 14 spec files, minor updates to ui-001, ui-007, legal-001
@@ -422,4 +424,15 @@ npm run build        # Production build
 npm run lint         # ESLint
 npm run test         # Run unit tests (vitest)
 npm run test:watch   # Run tests in watch mode
+npm run test:e2e     # Run E2E tests (playwright)
+npm run test:e2e:ui  # Run E2E tests with UI
 ```
+
+## E2E Testing
+
+- **Framework**: Playwright with Chromium
+- **Config**: playwright.config.ts (desktop + mobile projects)
+- **Test Directory**: e2e/
+- **Test Suites**: 10 suites covering app loads, symbol selector, quote form, quote results, error handling, URL state, mobile responsiveness, static pages, accessibility, and smoke test
+- **Smoke Test**: `npx playwright test e2e/smoke.spec.ts` for quick validation
+- **Note**: Analytics & Consent suite skipped (MVP doesn't need consent banner per specs/consent.md)
