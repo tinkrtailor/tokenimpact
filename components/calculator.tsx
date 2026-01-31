@@ -396,9 +396,9 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
   return (
     <div className={cn("w-full max-w-4xl mx-auto", className)}>
       {/* Controls Section */}
-      <div className="space-y-4 lg:space-y-0 lg:flex lg:items-end lg:gap-4">
+      <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[2fr_auto_1fr_auto] lg:gap-4 lg:items-end">
         {/* Symbol Selector */}
-        <div className="flex-1 lg:flex-[2]">
+        <div>
           <label
             htmlFor="symbol-selector"
             className="block text-sm font-medium text-muted-foreground mb-1.5"
@@ -417,7 +417,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         </div>
 
         {/* Direction Toggle */}
-        <div className="lg:flex-shrink-0">
+        <div>
           <label className="block text-sm font-medium text-muted-foreground mb-1.5">
             Direction
           </label>
@@ -428,8 +428,8 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
           />
         </div>
 
-        {/* Quantity Input */}
-        <div className="flex-1">
+        {/* Quantity Input - presets hidden on desktop, shown in separate row below */}
+        <div>
           <label
             htmlFor="quantity-input"
             className="block text-sm font-medium text-muted-foreground mb-1.5"
@@ -445,15 +445,16 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
             disabled={isLoading}
             presets={[1, 10, 100, 1000]}
             error={quantityError ?? undefined}
+            presetsClassName="lg:hidden"
           />
         </div>
 
         {/* Compare Button */}
-        <div className="lg:flex-shrink-0">
+        <div>
           <Button
             onClick={handleCompare}
             disabled={isLoading}
-            className="w-full lg:w-auto"
+            className="w-full lg:w-auto h-10"
             size="lg"
           >
             {isLoading ? (
@@ -465,6 +466,24 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
               "Compare Prices"
             )}
           </Button>
+        </div>
+
+        {/* Desktop Presets Row - spans full width */}
+        <div className="hidden lg:flex lg:col-span-full lg:gap-2 lg:mt-2">
+          <span className="text-sm text-muted-foreground self-center mr-2">Quick:</span>
+          {[1, 10, 100, 1000].map((preset) => (
+            <Button
+              key={preset}
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleQuantityChange(preset.toString())}
+              disabled={isLoading}
+              className="font-mono text-sm"
+            >
+              {preset.toLocaleString()}
+            </Button>
+          ))}
         </div>
       </div>
 

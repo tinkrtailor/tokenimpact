@@ -24,6 +24,8 @@ export interface QuantityInputProps {
   id?: string;
   /** Additional class name */
   className?: string;
+  /** Additional class for presets container (e.g., "lg:hidden" to hide on desktop) */
+  presetsClassName?: string;
 }
 
 /**
@@ -89,6 +91,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
       error,
       id,
       className,
+      presetsClassName,
     },
     ref
   ) => {
@@ -197,7 +200,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
 
         {/* Quick preset buttons */}
         {presets.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className={cn("flex flex-wrap gap-2", presetsClassName)}>
             {presets.map((preset) => (
               <Button
                 key={preset}
