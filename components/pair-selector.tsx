@@ -84,6 +84,8 @@ export interface PairSelectorProps {
   placeholder?: string;
   /** Error message to display */
   error?: string;
+  /** HTML id attribute for label association */
+  id?: string;
   className?: string;
 }
 
@@ -105,6 +107,7 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
       disabled = false,
       placeholder = "Select pair...",
       error,
+      id,
       className,
     },
     ref
@@ -190,12 +193,13 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
           <PopoverTrigger asChild>
             <Button
               ref={ref}
+              id={id}
               variant="outline"
               role="combobox"
               aria-expanded={open}
               aria-label="Select trading pair"
               aria-invalid={hasError}
-              aria-describedby={hasError ? "pair-selector-error" : undefined}
+              aria-describedby={hasError ? `${id}-error` : undefined}
               disabled={disabled}
               className={cn(
                 "w-full justify-between bg-card hover:bg-secondary/50",
@@ -276,7 +280,7 @@ const PairSelector = forwardRef<HTMLButtonElement, PairSelectorProps>(
       {/* Error message */}
       {hasError && (
         <p
-          id="pair-selector-error"
+          id={id ? `${id}-error` : "pair-selector-error"}
           className="text-sm text-destructive"
           role="alert"
         >

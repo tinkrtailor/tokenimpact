@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -635,7 +635,8 @@
       "title": "Add ARIA labels and screen reader support",
       "description": "Add ARIA labels to all interactive elements per specs/nfr.md. Ensure results are announced to screen readers. Use semantic HTML.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "polish",
       "verification": [
         "All buttons have aria-label or accessible text",
@@ -643,7 +644,8 @@
         "Form inputs have associated labels",
         "Status messages use aria-live regions"
       ],
-      "dependencies": ["ui-007"]
+      "dependencies": ["ui-007"],
+      "notes": "Added id props to PairSelector and QuantityInput for proper label association. Added aria-live region for results announcement in Calculator. Added aria-hidden to decorative icons. Form labels now properly associated via htmlFor/id pairs. Table sort buttons have descriptive aria-labels."
     },
     {
       "id": "perf-001",

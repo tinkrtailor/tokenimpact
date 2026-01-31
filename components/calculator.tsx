@@ -349,6 +349,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
           </label>
           <PairSelector
             ref={pairSelectorRef}
+            id="symbol-selector"
             symbols={initialSymbols}
             value={symbol}
             onChange={handleSymbolChange}
@@ -379,6 +380,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
           </label>
           <QuantityInput
             ref={quantityInputRef}
+            id="quantity-input"
             value={quantity}
             onChange={handleQuantityChange}
             baseAsset={baseAsset}
@@ -398,7 +400,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
           >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                 Comparing...
               </>
             ) : (
@@ -450,6 +452,13 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         {/* Results */}
         {quoteResult && !isLoading && (
           <>
+            {/* Screen reader announcement for results */}
+            <div className="sr-only" role="status" aria-live="polite">
+              {quoteResult.best
+                ? `Results loaded. Best exchange is ${quoteResult.best}.`
+                : "Results loaded."}
+            </div>
+
             {/* Header with Stale Warning and Copy Link */}
             <div className="flex items-center justify-between mb-4 gap-4">
               {/* Stale Data Warning */}
@@ -470,12 +479,12 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
               >
                 {isCopied ? (
                   <>
-                    <Check className="h-4 w-4" />
+                    <Check className="h-4 w-4" aria-hidden="true" />
                     Copied!
                   </>
                 ) : (
                   <>
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4" aria-hidden="true" />
                     Copy Link
                   </>
                 )}

@@ -20,6 +20,8 @@ export interface QuantityInputProps {
   disabled?: boolean;
   /** Error message to display */
   error?: string;
+  /** HTML id attribute for label association */
+  id?: string;
   /** Additional class name */
   className?: string;
 }
@@ -85,6 +87,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
       placeholder = "Enter amount",
       disabled = false,
       error,
+      id,
       className,
     },
     ref
@@ -157,6 +160,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
         <div className="relative">
           <Input
             ref={ref}
+            id={id}
             type="text"
             inputMode="decimal"
             value={displayValue}
@@ -165,7 +169,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
             placeholder={placeholder}
             disabled={disabled}
             aria-invalid={hasError}
-            aria-describedby={hasError ? "quantity-error" : undefined}
+            aria-describedby={hasError ? `${id}-error` : undefined}
             className={cn(
               "pr-16 font-mono",
               hasError && "border-destructive focus-visible:ring-destructive"
@@ -183,7 +187,7 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
         {/* Error message */}
         {hasError && (
           <p
-            id="quantity-error"
+            id={id ? `${id}-error` : "quantity-error"}
             className="text-sm text-destructive"
             role="alert"
           >
