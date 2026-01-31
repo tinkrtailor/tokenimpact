@@ -87,31 +87,45 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     return parts[1] ?? "USD";
   }, [symbol]);
 
-  // Track if initial sync has been done
-  const initialSyncDone = useRef(false);
+  // Calculate savings for best exchange vs worst
+  const savingsAmount = useMemo(() => {
+    if (!quoteResult || !quoteResult.best) return 0;
+    const okResults = quoteResult.results.filter((r) => r.status === "ok" && r.totalCost);
+    if (okResults.length < 2) return 0;
 
-  // Sync URL params to state on initial load
+    const costs = okResults.map((r) => parseFloat(r.totalCost ?? "0"));
+    const bestCost = Math.min(...costs);
+    const worstCost = Math.max(...costs);
+
+    // For buys, savings = worst - best; for sells, savings = best - worst
+    return side === "BUY" ? worstCost - bestCost : bestCost - worstCost;
+  }, [quoteResult, side]);
+
+  // Sync URL params to state whenever URL changes
   useEffect(() => {
-    if (initialSyncDone.current) return;
-    initialSyncDone.current = true;
-
     if (urlParams.s) {
       // Validate symbol exists in catalog
       const validSymbol = initialSymbols.find(
         (s) => s.symbol === urlParams.s
       );
-      if (validSymbol) {
+      if (validSymbol && symbol !== urlParams.s) {
         setSymbol(urlParams.s);
       }
     }
-    if (urlParams.qty) {
+    if (urlParams.qty && quantity !== urlParams.qty) {
       // Validate quantity is positive number
       const num = parseFloat(urlParams.qty);
       if (!isNaN(num) && num > 0) {
         setQuantity(urlParams.qty);
       }
     }
-  }, [urlParams.s, urlParams.qty, initialSymbols]);
+    if (urlParams.side) {
+      const newSide = urlParams.side === "sell" ? "SELL" : "BUY";
+      if (side !== newSide) {
+        setSide(newSide);
+      }
+    }
+  }, [urlParams.s, urlParams.qty, urlParams.side, initialSymbols, symbol, quantity, side]);
 
   // Update URL when state changes
   useEffect(() => {
@@ -545,6 +559,7 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
                   isBest={quote.exchange === quoteResult.best}
                   side={side}
                   quoteAsset={quoteAsset}
+                  savingsAmount={quote.exchange === quoteResult.best ? savingsAmount : undefined}
                   onTradeClick={handleTradeClick}
                 />
               ))}

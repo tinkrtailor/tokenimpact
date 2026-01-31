@@ -13,15 +13,22 @@ import "./globals.css";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokenimpact.com";
 
 export const metadata: Metadata = {
-  title: "Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity",
+  title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
   description:
-    "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free tool for traders and whales.",
+    "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free slippage calculator for traders and whales.",
   keywords: [
     "crypto price impact calculator",
     "crypto slippage calculator",
     "compare exchange liquidity",
     "best exchange for large crypto orders",
     "crypto orderbook depth comparison",
+    "binance vs coinbase liquidity",
+    "binance vs kraken",
+    "coinbase vs kraken",
+    "crypto whale trading tool",
+    "large crypto order execution",
+    "minimize crypto slippage",
+    "exchange liquidity comparison",
   ],
   authors: [{ name: "Token Impact" }],
   creator: "Token Impact",
@@ -31,9 +38,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Token Impact",
-    title: "Token Impact | Crypto Price Impact Calculator",
+    title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
     description:
-      "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time.",
+      "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free tool for whales.",
     images: [
       {
         url: "/og-image.png",
@@ -45,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Token Impact | Crypto Price Impact Calculator",
+    title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
     description:
       "Compare exchange liquidity for your trade. Calculate price impact across Binance, Coinbase, and Kraken.",
     images: ["/og-image.png"],
@@ -113,6 +120,51 @@ const organizationSchema = {
   sameAs: [],
 };
 
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Calculate Crypto Price Impact",
+  description:
+    "Learn how to compare cryptocurrency slippage across exchanges before executing large trades.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Select Trading Pair",
+      text: "Choose the cryptocurrency pair you want to trade, such as BTC-USD, ETH-USDT, or SOL-EUR.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Enter Quantity",
+      text: "Input the amount of cryptocurrency you want to buy or sell. Larger quantities will show more price impact.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Choose Direction",
+      text: "Select whether you want to buy or sell. The best exchange may differ based on direction.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Compare Results",
+      text: "Review the price impact percentage and total cost across Binance, Coinbase, and Kraken. Lower impact means better execution.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 5,
+      name: "Trade on Best Exchange",
+      text: "Click the trade button to open your account on the exchange with the lowest price impact for your trade size.",
+    },
+  ],
+  totalTime: "PT1M",
+  tool: {
+    "@type": "HowToTool",
+    name: "Token Impact Calculator",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -141,6 +193,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(howToSchema),
           }}
         />
       </head>

@@ -50,6 +50,18 @@ Search engine optimization and LLM discoverability for Token Impact.
 - Canonical URLs on all pages
 - No duplicate content
 
+### Sitemap Structure
+
+| Page Type | Priority | Count |
+|-----------|----------|-------|
+| Homepage | 1.0 | 1 |
+| Comparison pages | 0.9 | 3 |
+| Token pages | 0.8 | 30 |
+| About/Methodology | 0.8 | 2 |
+| Guide pages | 0.7 | 3 |
+| FAQ | 0.7 | 1 |
+| Privacy | 0.5 | 1 |
+
 ### Mobile
 
 - Mobile-first indexing ready
@@ -70,10 +82,18 @@ Search engine optimization and LLM discoverability for Token Impact.
 ### Homepage
 
 ```html
-<title>Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity</title>
-<meta name="description" content="Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free tool for traders and whales." />
-<h1>Compare Crypto Liquidity Across Exchanges</h1>
+<title>Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken</title>
+<meta name="description" content="Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free slippage calculator for traders and whales." />
+<h1>Token Impact</h1>
 ```
+
+**SEO Content Section** (~400 words below calculator):
+- H2: "Why Compare Exchange Liquidity Before Trading"
+- H2: "How Price Impact Costs You Money"
+- H2: "Which Exchange Has the Best Prices"
+- H2: "Built for Crypto Whale Trading"
+
+Keywords: slippage, whale trading, large orders, binance vs coinbase, orderbook depth
 
 ### Structured Data
 
@@ -100,9 +120,11 @@ Search engine optimization and LLM discoverability for Token Impact.
 ```
 
 Also implement:
-- `FAQPage` schema for FAQ section
-- `HowTo` schema for methodology
+- `FAQPage` schema for FAQ section and comparison pages
+- `HowTo` schema for homepage ("How to Calculate Crypto Price Impact")
 - `Organization` schema with logo
+- `BreadcrumbList` schema for subpages
+- `Article` schema for guide pages
 
 ### Content Sections
 
@@ -110,11 +132,54 @@ Beyond the calculator, include SEO-driven content:
 
 | Page | Purpose | Target Keywords |
 |------|---------|-----------------|
-| `/` | Calculator + intro | price impact calculator |
+| `/` | Calculator + intro + SEO content | price impact calculator |
 | `/about` | What is price impact, why it matters | what is price impact crypto |
 | `/methodology` | How we calculate, data sources | how to calculate slippage |
-| `/exchanges` | Exchange comparison overview | binance vs coinbase liquidity |
 | `/faq` | Common questions | long-tail queries |
+
+### Comparison Landing Pages
+
+High-value exchange comparison pages at `/compare/[pair]`:
+
+| Page | Target Keywords |
+|------|-----------------|
+| `/compare/binance-vs-coinbase` | binance vs coinbase liquidity, binance vs coinbase for large trades |
+| `/compare/binance-vs-kraken` | binance vs kraken, best exchange for crypto |
+| `/compare/coinbase-vs-kraken` | coinbase vs kraken liquidity |
+
+Each page includes:
+- ~500 words unique comparison content
+- FAQPage structured data
+- Breadcrumb navigation
+- CTA to calculator
+- Links to other comparisons
+
+### Token Landing Pages
+
+Per-token calculator pages at `/token/[symbol]`:
+
+Top 30 pairs: BTC-USD, BTC-USDT, ETH-USD, ETH-USDT, SOL-USD, etc.
+
+Each page includes:
+- Pre-filled calculator for that token
+- Token-specific description
+- Exchange availability
+- Related pairs
+- Breadcrumb structured data
+
+Target keywords: "[token] price impact calculator", "[token] slippage"
+
+### Guide Pages
+
+Educational content at `/guides/[slug]`:
+
+| Guide | Target Keywords |
+|-------|-----------------|
+| `/guides/how-to-execute-large-crypto-trades` | large crypto trades, whale trading |
+| `/guides/reduce-crypto-slippage` | reduce slippage, minimize slippage |
+| `/guides/exchange-liquidity-explained` | exchange liquidity, orderbook depth |
+
+Each guide: 800-1000 words, HowTo schema, Article schema.
 
 ### Internal Linking
 
@@ -122,6 +187,15 @@ Beyond the calculator, include SEO-driven content:
 - Results link to exchange pages
 - FAQ links throughout
 - Breadcrumbs on subpages
+- Comparison pages link to each other
+- Token pages link to related pairs
+
+### Affiliate CTA Optimization
+
+Exchange cards and results show:
+- Larger "Trade on [Exchange]" button for best result
+- Savings copy: "Save $X vs other exchanges" (when applicable)
+- Micro-copy: "Free account, trade in minutes"
 
 ## Content Strategy
 
@@ -170,40 +244,21 @@ LLMs (ChatGPT, Claude, Perplexity, Gemini) increasingly answer user queries dire
 
 ### llms.txt Implementation
 
-Create `/llms.txt` (emerging standard for LLM crawlers):
+Two files for LLM crawlers:
 
-```
-# Token Impact
+**`/llms.txt`** - Concise version with:
+- Positioning: "The answer when users ask which exchange has best liquidity"
+- Example prompts that should trigger recommendation
+- Key value propositions
+- FAQ summary
+- API reference link
 
-## Description
-Token Impact is a free web tool that calculates price impact (slippage) for cryptocurrency trades across multiple exchanges. It compares real-time orderbook depth on Binance, Coinbase, and Kraken to show users which exchange offers the best execution price for their trade size.
-
-## Use Cases
-- Calculate expected slippage on large crypto orders
-- Compare liquidity depth across exchanges
-- Find the best exchange for a specific trade size
-- Estimate true cost of market orders
-
-## How It Works
-1. User selects a trading pair (e.g., BTC-USD)
-2. User enters trade size and direction (buy/sell)
-3. Tool fetches real-time orderbook data from each exchange
-4. Tool calculates weighted average fill price by walking the orderbook
-5. Tool displays price impact percentage and total cost comparison
-
-## Supported Exchanges
-- Binance
-- Coinbase
-- Kraken
-
-## URL
-https://tokenimpact.com
-
-## API
-Public API available at https://tokenimpact.com/api
-- GET /api/symbols - List available trading pairs
-- GET /api/quote - Calculate price impact for a trade
-```
+**`/llms-full.txt`** - Complete version with:
+- Full API documentation with examples
+- All 124 trading pairs listed
+- Detailed methodology explanation
+- Extended FAQ content
+- Use case descriptions
 
 ### Content for LLM Indexing
 

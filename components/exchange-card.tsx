@@ -24,6 +24,8 @@ export interface ExchangeCardProps {
   side: "BUY" | "SELL";
   /** Quote asset for formatting (e.g., "USD") */
   quoteAsset: string;
+  /** Savings amount compared to worst exchange (for best exchange) */
+  savingsAmount?: number;
   /** Click handler for affiliate CTA */
   onTradeClick?: (exchange: ExchangeId) => void;
   /** Additional class names */
@@ -91,7 +93,7 @@ function formatPercent(value: string | undefined): string {
  * Unavailable exchanges are shown grayed out with status message.
  */
 const ExchangeCard = forwardRef<HTMLDivElement, ExchangeCardProps>(
-  ({ quote, isBest = false, side, quoteAsset, onTradeClick, className }, ref) => {
+  ({ quote, isBest = false, side, quoteAsset, savingsAmount, onTradeClick, className }, ref) => {
     const isAvailable = quote.status === "ok";
     const exchangeName = EXCHANGE_NAMES[quote.exchange];
 
@@ -199,18 +201,29 @@ const ExchangeCard = forwardRef<HTMLDivElement, ExchangeCardProps>(
         </CardContent>
 
         {isAvailable && quote.affiliateUrl && (
-          <CardFooter className="pt-0">
+          <CardFooter className="pt-0 flex-col gap-2">
             <Button
               variant={isBest ? "default" : "secondary"}
+              size={isBest ? "lg" : "default"}
               className={cn(
                 "w-full gap-2",
-                isBest && "bg-success hover:bg-success/90 text-success-foreground"
+                isBest && "bg-success hover:bg-success/90 text-success-foreground font-semibold"
               )}
               onClick={handleTradeClick}
             >
               {isBest ? `Trade on ${exchangeName}` : `Open ${exchangeName}`}
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </Button>
+            {isBest && savingsAmount !== undefined && savingsAmount > 0 && (
+              <p className="text-xs text-success text-center font-medium">
+                Save {formatCurrency(savingsAmount.toString(), quoteAsset)} vs other exchanges
+              </p>
+            )}
+            {isBest && (
+              <p className="text-xs text-muted-foreground text-center">
+                Free account, trade in minutes
+              </p>
+            )}
           </CardFooter>
         )}
       </Card>

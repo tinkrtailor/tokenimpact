@@ -87,17 +87,17 @@ export function generateDynamicMetadata(
  */
 export function getBaseMetadata(): Metadata {
   return {
-    title: "Token Impact | Crypto Price Impact Calculator - Compare Exchange Liquidity",
+    title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
     description:
-      "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free tool for traders and whales.",
+      "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free slippage calculator for traders and whales.",
     openGraph: {
       type: "website",
       locale: "en_US",
       url: siteUrl,
       siteName: "Token Impact",
-      title: "Token Impact | Crypto Price Impact Calculator",
+      title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
       description:
-        "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time.",
+        "Calculate the true cost of large crypto trades. Compare price impact across Binance, Coinbase, and Kraken in real-time. Free tool for whales.",
       images: [
         {
           url: "/og-image.png",
@@ -109,7 +109,7 @@ export function getBaseMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Token Impact | Crypto Price Impact Calculator",
+      title: "Token Impact | Compare Crypto Slippage - Binance vs Coinbase vs Kraken",
       description:
         "Compare exchange liquidity for your trade. Calculate price impact across Binance, Coinbase, and Kraken.",
       images: ["/og-image.png"],

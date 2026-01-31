@@ -8,6 +8,7 @@ import { getSymbolCatalog } from "@/lib/symbol-catalog";
 import { Calculator } from "@/components/calculator";
 import { AdSlot } from "@/components/ad-slot";
 import { HeroSection } from "@/components/hero-section";
+import { SeoContent } from "@/components/seo-content";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PageProps {
@@ -83,6 +84,9 @@ export default function Home() {
           <Calculator initialSymbols={symbols} />
         </Suspense>
       </main>
+
+      {/* SEO Content */}
+      <SeoContent />
     </div>
   );
 }
