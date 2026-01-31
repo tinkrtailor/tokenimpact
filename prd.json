@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -551,14 +551,16 @@
       "title": "Create privacy policy and disclosures",
       "description": "Create footer with affiliate disclosure per specs/monetization.md: 'We earn commission from partner links'. Add link to privacy policy. Per specs/consent.md MVP approach: no cookie consent banner needed (Vercel Analytics is cookie-less, affiliate tracking is server-side).",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Footer shows affiliate disclosure text",
         "Privacy policy link is present",
         "Privacy policy page exists at /privacy or linked externally"
       ],
-      "dependencies": ["ui-001"]
+      "dependencies": ["ui-001"],
+      "notes": "Created components/footer.tsx with affiliate disclosure text, navigation links to About/Methodology/FAQ/Privacy. Created app/privacy/page.tsx with comprehensive privacy policy covering data collection, third parties, affiliate disclosure, user rights, and DNT. Added Footer to layout.tsx. Added /privacy to sitemap.ts."
     },
     {
       "id": "error-001",

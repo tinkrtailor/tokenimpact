@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tokenimpact.com";
@@ -128,8 +129,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-background font-sans antialiased">
-        <NuqsAdapter>{children}</NuqsAdapter>
+      <body className="flex min-h-screen flex-col bg-background font-sans antialiased">
+        <NuqsAdapter>
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </NuqsAdapter>
       </body>
     </html>
   );
