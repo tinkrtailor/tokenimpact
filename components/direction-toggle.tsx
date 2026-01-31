@@ -33,7 +33,7 @@ const DirectionToggle = forwardRef<HTMLDivElement, DirectionToggleProps>(
       <div
         ref={ref}
         className={cn(
-          "inline-flex rounded-md border border-border bg-card p-1",
+          "inline-flex h-10 rounded-md border border-border bg-card p-0.5",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -49,7 +49,7 @@ const DirectionToggle = forwardRef<HTMLDivElement, DirectionToggleProps>(
           onClick={() => onChange("BUY")}
           onKeyDown={handleKeyDown("BUY")}
           className={cn(
-            "relative px-4 py-2 text-sm font-medium rounded transition-all duration-150",
+            "relative h-full px-4 text-sm font-medium rounded-[4px] transition-all duration-150",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             value === "BUY"
               ? "bg-primary text-primary-foreground shadow-sm"
@@ -68,7 +68,7 @@ const DirectionToggle = forwardRef<HTMLDivElement, DirectionToggleProps>(
           onClick={() => onChange("SELL")}
           onKeyDown={handleKeyDown("SELL")}
           className={cn(
-            "relative px-4 py-2 text-sm font-medium rounded transition-all duration-150",
+            "relative h-full px-4 text-sm font-medium rounded-[4px] transition-all duration-150",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             value === "SELL"
               ? "bg-accent-alt text-accent-alt-foreground shadow-sm"

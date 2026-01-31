@@ -203,10 +203,9 @@ const QuantityInput = forwardRef<HTMLInputElement, QuantityInputProps>(
                 key={preset}
                 type="button"
                 variant="outline"
-                size="sm"
                 onClick={() => handlePresetClick(preset)}
                 disabled={disabled}
-                className="min-w-[3rem] font-mono text-xs"
+                className="min-w-[3rem] font-mono text-sm"
               >
                 {preset.toLocaleString()}
               </Button>
