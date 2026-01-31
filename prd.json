@@ -1,7 +1,7 @@
 {
-  "version": 2,
+  "version": 3,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "All tasks completed. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003, legal-001, error-002, error-003, a11y-001, a11y-002, perf-001, monitor-001, test-002 completed 2026-01-31.",
+  "planningNotes": "Session 11 (2026-01-31): 8 parallel subagents validated specs vs implementation. All 45 original tasks completed. Discovered 3 gaps requiring new tasks: E2E testing suite (validation.md), data freshness flagging (core.md), X-Request-Id header (api.md). Minor gaps (Binance weight tracking, Coinbase request queuing, volume caching, token page count) deferred as post-MVP polish.",
   "tasks": [
     {
       "id": "setup-001",
@@ -746,6 +746,49 @@
       ],
       "dependencies": ["setup-003"],
       "notes": "Created brand assets using impact rings design (concentric circles emanating from center point). Generated via scripts/generate-assets.mjs using sharp for SVG-to-PNG conversion. Icon uses Void Black background with Electric Cyan rings. OG image includes logo, tagline, exchange badges, and subtle grid pattern. All verification criteria pass."
+    },
+    {
+      "id": "test-003",
+      "title": "Implement E2E testing suite with Playwright",
+      "description": "Create E2E test suite per specs/validation.md. Configure Playwright with Chromium and mobile viewport. Implement critical test suites: app loads, symbol selector, quote form, quote results, error handling, URL state, mobile responsiveness, static pages, and accessibility.",
+      "priority": 1,
+      "status": "pending",
+      "category": "core",
+      "verification": [
+        "playwright.config.ts exists with desktop and mobile projects",
+        "e2e/ directory contains test files for all 10 suites from specs/validation.md",
+        "npx playwright test passes with all critical tests",
+        "npm run test:e2e script added to package.json"
+      ],
+      "dependencies": ["ui-007", "api-002", "page-001", "page-002", "page-003"]
+    },
+    {
+      "id": "api-005",
+      "title": "Add X-Request-Id header to API responses",
+      "description": "Add unique request identifier header to all API responses per specs/api.md. Generate UUID for each request in middleware and include in all responses for request tracing.",
+      "priority": 3,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "All /api/* responses include X-Request-Id header",
+        "X-Request-Id is a valid UUID format",
+        "Header is included in error responses (4xx, 5xx)"
+      ],
+      "dependencies": ["api-004"]
+    },
+    {
+      "id": "api-006",
+      "title": "Add data freshness flag to quote response",
+      "description": "Per specs/core.md line 64, stale data (>5s) should be flagged in response. Add 'stale' boolean field to quote response when orderbook timestamp is older than 5 seconds.",
+      "priority": 2,
+      "status": "pending",
+      "category": "feature",
+      "verification": [
+        "/api/quote response includes 'stale' field per exchange",
+        "stale=true when orderbook.timestamp > 5 seconds old",
+        "Response schema updated in lib/validation.ts"
+      ],
+      "dependencies": ["api-002"]
     }
   ]
 }
