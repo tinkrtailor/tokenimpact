@@ -133,10 +133,15 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col bg-background font-sans antialiased">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <OfflineBanner />
         <NuqsAdapter>
           <ErrorBoundary>
-            <div className="flex-1">{children}</div>
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
           </ErrorBoundary>
           <Footer />
           <Toaster />
