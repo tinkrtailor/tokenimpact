@@ -7,7 +7,7 @@
  * - /api/health: 10 req/min
  *
  * Returns 429 Too Many Requests when limit exceeded.
- * Includes X-RateLimit-* headers in all API responses.
+ * Includes X-RateLimit-* and X-Request-Id headers in all API responses.
  */
 
 import { NextResponse } from 'next/server';
@@ -18,6 +18,20 @@ import {
   rateLimitConfigs,
 } from '@/lib/rate-limit';
 import { createErrorResponse, ErrorCode } from '@/lib/validation';
+
+/**
+ * Generates a unique request ID for tracing.
+ *
+ * Uses crypto.randomUUID() which is available in modern runtimes.
+ * Falls back to a timestamp-based ID if unavailable.
+ */
+function generateRequestId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback for environments without crypto.randomUUID
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+}
 
 /**
  * Extracts the client IP address from the request.
@@ -62,10 +76,16 @@ export function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
+  // Generate unique request ID for tracing
+  const requestId = generateRequestId();
+
   // Check if this endpoint has rate limiting
   const endpointKey = getEndpointKey(pathname);
   if (!endpointKey) {
-    return NextResponse.next();
+    // No rate limiting, but still add X-Request-Id
+    const response = NextResponse.next();
+    response.headers.set('X-Request-Id', requestId);
+    return response;
   }
 
   // Get client IP
@@ -76,7 +96,7 @@ export function middleware(request: NextRequest): NextResponse {
   const rateLimitHeaders = createRateLimitHeaders(result);
 
   if (!result.allowed) {
-    // Rate limited - return 429
+    // Rate limited - return 429 with X-Request-Id
     const errorBody = createErrorResponse(
       ErrorCode.RATE_LIMITED,
       'Too many requests. Please try again later.',
@@ -89,19 +109,23 @@ export function middleware(request: NextRequest): NextResponse {
       status: 429,
       headers: {
         ...rateLimitHeaders,
+        'X-Request-Id': requestId,
         'Retry-After': String(result.reset - Math.floor(Date.now() / 1000)),
         'Cache-Control': 'no-store',
       },
     });
   }
 
-  // Allowed - continue with rate limit headers
+  // Allowed - continue with rate limit headers and X-Request-Id
   const response = NextResponse.next();
 
   // Add rate limit headers to response
   for (const [key, value] of Object.entries(rateLimitHeaders)) {
     response.headers.set(key, value);
   }
+
+  // Add X-Request-Id header
+  response.headers.set('X-Request-Id', requestId);
 
   return response;
 }
