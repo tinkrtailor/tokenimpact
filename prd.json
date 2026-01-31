@@ -368,7 +368,8 @@
       "title": "Implement main calculator page",
       "description": "Create app/page.tsx combining all UI components per specs/ui.md. Mobile: stacked layout with symbol, side, quantity, compare button, and result cards. Desktop: horizontal controls with results table. Include Copy Link feature per specs/url-state.md.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Mobile layout (< 768px) shows stacked card results",
@@ -377,7 +378,8 @@
         "Loading state shows skeleton components",
         "Copy Link button appears after successful calculation and copies URL to clipboard"
       ],
-      "dependencies": ["ui-002", "ui-003", "ui-004", "ui-005", "ui-006", "api-002"]
+      "dependencies": ["ui-002", "ui-003", "ui-004", "ui-005", "ui-006", "api-002"],
+      "notes": "Created Calculator component with nuqs URL state, responsive layout (mobile cards/desktop table), skeleton loading states, and Copy Link button. Added NuqsAdapter to layout.tsx. Auto-fetches on page load if URL has valid params."
     },
     {
       "id": "ui-008",
