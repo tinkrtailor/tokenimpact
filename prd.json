@@ -104,14 +104,16 @@
       "title": "Implement symbol normalization",
       "description": "Create lib/symbols.ts with bidirectional symbol mapping per specs/symbols.md. Handle Binance (BTCUSDT→BTC-USDT), Coinbase (BTC-USD→BTC-USD), Kraken (XXBTZUSD→BTC-USD, XBT→BTC mapping).",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "normalizeSymbol('BTCUSDT', 'binance') returns 'BTC-USDT'",
         "toExchangeSymbol('BTC-USD', 'kraken') returns 'XXBTZUSD' or equivalent",
         "Kraken XBT→BTC mapping works correctly"
       ],
-      "dependencies": ["setup-001"]
+      "dependencies": ["setup-001"],
+      "notes": "Implemented normalizeSymbol() and toExchangeSymbol() with support for all three exchanges. Handles Kraken XBT→BTC mapping, X/Z prefix normalization, and bidirectional conversion. Also added parseNormalizedSymbol() and isValidNormalizedSymbol() utilities."
     },
     {
       "id": "core-004",
