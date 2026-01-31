@@ -4,20 +4,19 @@ How to build, run, and test Token Impact.
 
 ## Prerequisites
 
-- Node.js 18+
-- npm
+- Bun (latest)
 - Docker (for sandboxed Ralph loops)
 
 ## Setup
 
 ```bash
-npm install
+bun install
 ```
 
 ## Development
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Starts dev server at http://localhost:3000
@@ -25,13 +24,13 @@ Starts dev server at http://localhost:3000
 ## Build
 
 ```bash
-npm run build
+bun run build
 ```
 
 ## Lint
 
 ```bash
-npm run lint
+bun run lint
 ```
 
 ## Full Validation
@@ -39,7 +38,7 @@ npm run lint
 Run before committing:
 
 ```bash
-npm run lint && npm run build
+bun run lint && bun run build
 ```
 
 ## Project Structure

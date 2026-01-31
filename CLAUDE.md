@@ -22,23 +22,23 @@ Crypto liquidity calculator - compare price impact across exchanges.
 
 ### Before Making Changes
 
-1. Run `npm run dev` to verify current state
+1. Run `bun run dev` to verify current state
 2. Read `PRODUCT.md` for context
 
 ### After Making Changes
 
-1. Run `npm run lint`
-2. Run `npm run build` (catches type errors)
+1. Run `bun run lint`
+2. Run `bun run build` (catches type errors)
 3. Test on mobile viewport
 4. Commit with conventional commit format
 
 ## Quick Commands
 
 ```bash
-npm run dev          # Start dev server
-npm run build        # Production build
-npm run lint         # ESLint
-npm run format       # Prettier (if configured)
+bun run dev          # Start dev server
+bun run build        # Production build
+bun run lint         # ESLint
+bun run format       # Prettier (if configured)
 ```
 
 ## Rules

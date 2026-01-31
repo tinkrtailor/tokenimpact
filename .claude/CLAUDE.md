@@ -21,10 +21,10 @@ Crypto liquidity calculator - compare price impact across exchanges (Binance, Co
 ## Development
 
 ```bash
-npm install
-npm run dev        # Start dev server (port 3000)
-npm run build      # Production build
-npm run lint       # ESLint
+bun install
+bun run dev        # Start dev server (port 3000)
+bun run build      # Production build
+bun run lint       # ESLint
 ```
 
 ## Conventions

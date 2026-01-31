@@ -19,10 +19,10 @@
 
 5. Run quality gates in order:
    ```bash
-   npm run lint && npm run build
+   bun run lint && bun run build
    ```
 6. If any step fails, fix before proceeding - do NOT commit broken code
-7. A task is NOT complete until `npm run build` succeeds
+7. A task is NOT complete until `bun run build` succeeds
 
 ## Update State
 
