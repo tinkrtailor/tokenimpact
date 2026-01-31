@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -184,7 +184,8 @@
       "title": "Create exchange aggregator",
       "description": "Create lib/exchanges/index.ts that orchestrates parallel fetching from all exchanges. Implement timeout handling (5s), partial success (return available exchanges on failure), and status tracking per specs/exchanges.md.",
       "priority": 1,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "Fetches from all exchanges in parallel using Promise.allSettled",
@@ -192,7 +193,8 @@
         "Returns partial results when some exchanges fail",
         "Status field indicates ok, error, timeout, or unavailable"
       ],
-      "dependencies": ["exchange-001", "exchange-002", "exchange-003"]
+      "dependencies": ["exchange-001", "exchange-002", "exchange-003"],
+      "notes": "Created lib/exchanges/index.ts with fetchAllExchanges() using Promise.allSettled for parallel fetching, withTimeout() for 5s timeout handling, and proper status tracking (ok, error, timeout, unavailable). Also added fetchExchanges() for selective exchange queries, getAffiliateUrl(), getSupportedExchanges(), and getExchangeClient() helpers."
     },
     {
       "id": "api-001",
