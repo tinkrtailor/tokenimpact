@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-002, ui-003, ui-004, ui-005, ui-006, ui-007, ui-008, monetization-001, monetization-002, error-001, test-001, brand-001, deploy-001, seo-001, seo-002, seo-003, seo-004, page-001, page-002, page-003 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -534,7 +534,8 @@
       "title": "Create /faq page",
       "description": "Create app/faq/page.tsx with common questions per specs/seo.md. Include FAQPage schema. Answer long-tail queries like 'how much slippage on $100k bitcoin order'.",
       "priority": 3,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Page renders at /faq",
@@ -542,7 +543,8 @@
         "Includes FAQPage structured data",
         "Answers specific long-tail queries from specs/seo.md"
       ],
-      "dependencies": ["ui-001", "seo-004"]
+      "dependencies": ["ui-001", "seo-004"],
+      "notes": "Created app/faq/page.tsx with 14 FAQs covering price impact, slippage, exchange liquidity, and common user questions. Includes FAQPage JSON-LD structured data. Answers long-tail queries like 'How much slippage should I expect on a $100,000 Bitcoin order?' and 'Which exchange has the deepest liquidity for Bitcoin?'. Follows same design patterns as /about and /methodology pages."
     },
     {
       "id": "legal-001",
