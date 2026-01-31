@@ -2,14 +2,15 @@
 
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useQueryStates, parseAsString, parseAsStringLiteral } from "nuqs";
-import { Copy, Check, Loader2 } from "lucide-react";
+import { Copy, Check, Loader2, AlertTriangle } from "lucide-react";
 import { PairSelector } from "@/components/pair-selector";
 import { DirectionToggle } from "@/components/direction-toggle";
 import { QuantityInput } from "@/components/quantity-input";
 import { ExchangeCard } from "@/components/exchange-card";
 import { ResultsTable } from "@/components/results-table";
+import { ExchangeCardSkeleton } from "@/components/exchange-card-skeleton";
+import { ResultsTableSkeleton } from "@/components/results-table-skeleton";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { Side } from "@/lib/calculations";
 import type { QuoteResponse, SymbolInfo, ExchangeId } from "@/lib/exchanges/types";
 import { cn } from "@/lib/utils";
@@ -54,6 +55,8 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
   const [quantity, setQuantity] = useState(urlParams.qty ?? "");
   const [isLoading, setIsLoading] = useState(false);
   const [quoteResult, setQuoteResult] = useState<QuoteResponse | null>(null);
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
+  const [isStale, setIsStale] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -247,13 +250,38 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
       }
 
       setQuoteResult(data as QuoteResponse);
+      setFetchedAt(Date.now());
+      setIsStale(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setQuoteResult(null);
+      setFetchedAt(null);
+      setIsStale(false);
     } finally {
       setIsLoading(false);
     }
   }, [symbol, side, quantity, validateSymbol, validateQuantity]);
+
+  // Track stale data (>5s old) with interval
+  useEffect(() => {
+    if (!fetchedAt || !quoteResult) {
+      setIsStale(false);
+      return;
+    }
+
+    // Check immediately if already stale
+    const checkStale = () => {
+      const age = Date.now() - fetchedAt;
+      setIsStale(age > 5000);
+    };
+
+    checkStale();
+
+    // Check every second
+    const interval = setInterval(checkStale, 1000);
+
+    return () => clearInterval(interval);
+  }, [fetchedAt, quoteResult]);
 
   // Track if auto-fetch has been done
   const autoFetchDone = useRef(false);
@@ -381,28 +409,13 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
             {/* Mobile: Skeleton Cards */}
             <div className="space-y-4 lg:hidden">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-xl border bg-card p-6 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Skeleton className="h-6 w-24" />
-                    <Skeleton className="h-5 w-12" />
-                  </div>
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-10 w-full mt-4" />
-                </div>
+                <ExchangeCardSkeleton key={i} />
               ))}
             </div>
 
             {/* Desktop: Skeleton Table */}
-            <div className="hidden lg:block">
-              <div className="rounded-lg border">
-                <div className="p-4 space-y-4">
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                </div>
-              </div>
+            <div className="hidden lg:block rounded-lg border overflow-hidden">
+              <ResultsTableSkeleton rows={3} />
             </div>
           </>
         )}
@@ -410,13 +423,23 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
         {/* Results */}
         {quoteResult && !isLoading && (
           <>
-            {/* Copy Link Button */}
-            <div className="flex justify-end mb-4">
+            {/* Header with Stale Warning and Copy Link */}
+            <div className="flex items-center justify-between mb-4 gap-4">
+              {/* Stale Data Warning */}
+              {isStale && (
+                <div className="flex items-center gap-2 text-amber-500 text-sm">
+                  <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+                  <span>Data may be stale. Click Compare to refresh.</span>
+                </div>
+              )}
+              {!isStale && <div />}
+
+              {/* Copy Link Button */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleCopyLink}
-                className="gap-2"
+                className="gap-2 flex-shrink-0"
               >
                 {isCopied ? (
                   <>
