@@ -10,6 +10,7 @@ import { ExchangeCard } from "@/components/exchange-card";
 import { ResultsTable } from "@/components/results-table";
 import { ExchangeCardSkeleton } from "@/components/exchange-card-skeleton";
 import { ResultsTableSkeleton } from "@/components/results-table-skeleton";
+import { AdSlot } from "@/components/ad-slot";
 import { Button } from "@/components/ui/button";
 import type { Side } from "@/lib/calculations";
 import type { QuoteResponse, SymbolInfo, ExchangeId } from "@/lib/exchanges/types";
@@ -554,6 +555,13 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
               Select a trading pair, enter a quantity, and click Compare Prices
               to see price impact across exchanges.
             </p>
+          </div>
+        )}
+
+        {/* Results Bottom Ad (shown after results) */}
+        {quoteResult && !isLoading && (
+          <div className="mt-8 flex justify-center">
+            <AdSlot slotId="results-bottom" />
           </div>
         )}
       </div>

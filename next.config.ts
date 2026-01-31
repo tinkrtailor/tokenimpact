@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: https:",
               "font-src 'self'",
               "connect-src 'self' https://api.binance.com https://api.coinbase.com https://api.kraken.com https://www.google-analytics.com",
-              "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+              "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ad.a-ads.com",
               "frame-ancestors 'none'",
               "form-action 'self'",
               "base-uri 'self'",

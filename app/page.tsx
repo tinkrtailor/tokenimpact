@@ -6,6 +6,7 @@ import {
 } from "@/lib/metadata";
 import { getSymbolCatalog } from "@/lib/symbol-catalog";
 import { Calculator } from "@/components/calculator";
+import { AdSlot } from "@/components/ad-slot";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PageProps {
@@ -67,10 +68,25 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Calculator */}
-      <Suspense fallback={<CalculatorSkeleton />}>
-        <Calculator initialSymbols={symbols} />
-      </Suspense>
+      {/* Top Banner Ad */}
+      <div className="mb-8 flex justify-center">
+        <AdSlot slotId="top-banner" />
+      </div>
+
+      {/* Main Content with Sidebar */}
+      <div className="flex gap-8 justify-center">
+        {/* Calculator */}
+        <div className="flex-1 max-w-4xl">
+          <Suspense fallback={<CalculatorSkeleton />}>
+            <Calculator initialSymbols={symbols} />
+          </Suspense>
+        </div>
+
+        {/* Sidebar Ad (desktop only) */}
+        <aside className="flex-shrink-0">
+          <AdSlot slotId="sidebar" className="sticky top-8" />
+        </aside>
+      </div>
     </div>
   );
 }

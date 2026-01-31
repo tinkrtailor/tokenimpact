@@ -12,6 +12,9 @@ interface SlotDimensions {
   desktop: { width: number; height: number };
 }
 
+/** A-ADS size format string */
+type AAdsSize = `${number}x${number}`;
+
 /** Dimension configurations per slot */
 const SLOT_DIMENSIONS: Record<AdSlotId, SlotDimensions> = {
   "top-banner": {
@@ -26,6 +29,27 @@ const SLOT_DIMENSIONS: Record<AdSlotId, SlotDimensions> = {
     mobile: null, // Hidden on mobile
     desktop: { width: 300, height: 250 },
   },
+};
+
+/** A-ADS size mappings for each slot */
+const AADS_SIZES: Record<AdSlotId, { mobile: AAdsSize | null; desktop: AAdsSize }> = {
+  "top-banner": {
+    mobile: "320x50",
+    desktop: "728x90",
+  },
+  "results-bottom": {
+    mobile: "320x100",
+    desktop: "728x90",
+  },
+  sidebar: {
+    mobile: null,
+    desktop: "300x250",
+  },
+};
+
+/** Get A-ADS publisher site ID from environment */
+const getAAdsSiteId = (): string | undefined => {
+  return process.env.NEXT_PUBLIC_AADS_SITE_ID;
 };
 
 export interface AdSlotProps {
@@ -87,18 +111,18 @@ export function AdSlot({
     return () => observer.disconnect();
   }, []);
 
-  // Simulate ad loading after visibility
+  // Mark as loaded once visible (A-ADS iframes load independently)
   useEffect(() => {
     if (!isVisible) return;
-
-    // In production, this would trigger ad network script
-    // For now, we simulate loading delay
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
+    setIsLoaded(true);
   }, [isVisible]);
+
+  // Check if A-ADS is configured
+  const aadsSiteId = getAAdsSiteId();
+  const hasAds = !!aadsSiteId;
+
+  // Get A-ADS sizes for current slot
+  const aadsSizes = AADS_SIZES[slotId];
 
   // For sidebar slot, hide on mobile
   const hiddenOnMobile = dimensions.mobile === null;
@@ -143,8 +167,43 @@ export function AdSlot({
           }
         `}</style>
 
-        {/* Placeholder content (shown until ad network fills) */}
-        {showPlaceholder && isVisible && (
+        {/* A-ADS iframe (when configured) */}
+        {hasAds && isVisible && (
+          <>
+            {/* Mobile iframe */}
+            {aadsSizes.mobile && (
+              <iframe
+                data-aa={aadsSiteId}
+                src={`//ad.a-ads.com/${aadsSiteId}?size=${aadsSizes.mobile}`}
+                className="absolute inset-0 lg:hidden border-0"
+                style={{
+                  width: dimensions.mobile?.width ?? dimensions.desktop.width,
+                  height: dimensions.mobile?.height ?? dimensions.desktop.height,
+                }}
+                title={`Advertisement - ${slotId}`}
+                loading="lazy"
+              />
+            )}
+            {/* Desktop iframe */}
+            <iframe
+              data-aa={aadsSiteId}
+              src={`//ad.a-ads.com/${aadsSiteId}?size=${aadsSizes.desktop}`}
+              className={cn(
+                "absolute inset-0 border-0",
+                aadsSizes.mobile ? "hidden lg:block" : ""
+              )}
+              style={{
+                width: dimensions.desktop.width,
+                height: dimensions.desktop.height,
+              }}
+              title={`Advertisement - ${slotId}`}
+              loading="lazy"
+            />
+          </>
+        )}
+
+        {/* Placeholder content (shown when A-ADS not configured) */}
+        {!hasAds && showPlaceholder && isVisible && (
           <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/40">
             <span className="text-xs font-mono">
               {slotId}
@@ -158,21 +217,6 @@ export function AdSlot({
             </span>
           </div>
         )}
-
-        {/*
-          Ad network script injection point
-          In production, the ad network (AdSense, Coinzilla, etc.)
-          would inject ad content here based on slot ID.
-
-          Example for Google AdSense:
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-XXXXX"
-               data-ad-slot="XXXXX"
-               data-ad-format="auto"
-               data-full-width-responsive="true">
-          </ins>
-        */}
       </div>
     </div>
   );
