@@ -24,6 +24,7 @@ Token Impact helps traders find the best exchange for large orders by calculatin
 | [errors.md](errors.md) | Error messages, UI patterns, recovery strategies | Ready |
 | [consent.md](consent.md) | Cookie consent, GDPR, privacy policy | Ready |
 | [brand-assets.md](brand-assets.md) | Logos, favicons, OG images, PWA icons | Ready |
+| [validation.md](validation.md) | E2E Playwright tests, final gate before complete | Ready |
 
 ## Target Users
 
