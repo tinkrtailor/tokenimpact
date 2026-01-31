@@ -284,7 +284,8 @@
       "title": "Implement symbol selector component",
       "description": "Create components/pair-selector.tsx as searchable dropdown per specs/ui.md. Show exchange availability badges, recently used at top, common pairs (BTC, ETH) prioritized. Full keyboard navigation.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "Typing filters symbol list in real-time",
@@ -292,7 +293,8 @@
         "Arrow keys navigate, Enter selects",
         "BTC and ETH pairs appear before obscure tokens"
       ],
-      "dependencies": ["setup-002", "api-001"]
+      "dependencies": ["setup-002", "api-001"],
+      "notes": "Created components/pair-selector.tsx as a searchable combobox using shadcn/ui Command and Popover. Features: real-time search filtering, exchange availability badges (BN/CB/KR), recently used symbols persisted in localStorage, full keyboard navigation via Command component. Symbols are already sorted by priority from symbol-catalog.ts (BTC/ETH pairs first)."
     },
     {
       "id": "ui-003",
