@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004, exchange-001, exchange-002, exchange-003, exchange-004, api-001, api-002, api-003, api-004, ui-001, ui-003 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -299,14 +299,16 @@
       "title": "Implement direction toggle component",
       "description": "Create components/direction-toggle.tsx with BUY (cyan) and SELL (magenta) buttons per specs/ui.md and nfr.md colors. Triggers recalculation when toggled if quantity is set.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "feature",
       "verification": [
         "BUY button uses Electric Cyan (#22d3ee) when selected",
         "SELL button uses Magenta (#e879f9) when selected",
         "Toggle dispatches onChange event with new side value"
       ],
-      "dependencies": ["setup-002"]
+      "dependencies": ["setup-002"],
+      "notes": "Created components/direction-toggle.tsx as a forwardRef client component. BUY uses bg-primary (Electric Cyan), SELL uses bg-accent-alt (Magenta). Full keyboard accessibility with ARIA roles, focus states, and disabled support."
     },
     {
       "id": "ui-004",
