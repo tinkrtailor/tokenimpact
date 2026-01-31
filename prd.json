@@ -1,7 +1,7 @@
 {
   "version": 2,
   "lastUpdated": "2026-01-31",
-  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001 completed 2026-01-31.",
+  "planningNotes": "Implementation in progress. setup-001, setup-002, setup-003, setup-004, core-001, core-002, core-003, core-004 completed 2026-01-31.",
   "tasks": [
     {
       "id": "setup-001",
@@ -120,14 +120,16 @@
       "title": "Create Zod validation schemas",
       "description": "Create lib/validation.ts with Zod schemas for API request/response validation per specs/api.md. Include QuoteRequestSchema, SymbolsRequestSchema, QuoteResponseSchema, ErrorResponseSchema.",
       "priority": 2,
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-01-31",
       "category": "core",
       "verification": [
         "QuoteRequestSchema validates symbol, side (BUY|SELL), quantity",
         "Quantity validation rejects <= 0 and non-numeric",
         "Error response includes code, message, details fields"
       ],
-      "dependencies": ["core-002"]
+      "dependencies": ["core-002"],
+      "notes": "Created lib/validation.ts with comprehensive Zod schemas: QuoteRequestSchema, SymbolsRequestSchema, ExchangeQuoteSchema, QuoteResponseSchema, SymbolsResponseSchema, HealthResponseSchema, ErrorResponseSchema. Added ErrorCode enum from specs/errors.md. Includes helper functions parseQuoteRequest, parseSymbolsRequest, createErrorResponse, formatValidationErrors."
     },
     {
       "id": "exchange-001",
