@@ -101,31 +101,31 @@ export function Calculator({ initialSymbols, className }: CalculatorProps) {
     return side === "BUY" ? worstCost - bestCost : bestCost - worstCost;
   }, [quoteResult, side]);
 
-  // Sync URL params to state whenever URL changes
+  // Sync URL params to state on initial load or external URL changes (back/forward navigation)
+  // Note: We intentionally exclude symbol, quantity, side from deps to prevent circular updates.
+  // This effect only runs when URL params change, not when local state changes.
   useEffect(() => {
     if (urlParams.s) {
       // Validate symbol exists in catalog
       const validSymbol = initialSymbols.find(
         (s) => s.symbol === urlParams.s
       );
-      if (validSymbol && symbol !== urlParams.s) {
-        setSymbol(urlParams.s);
+      if (validSymbol) {
+        setSymbol((current) => current !== urlParams.s ? urlParams.s : current);
       }
     }
-    if (urlParams.qty && quantity !== urlParams.qty) {
+    if (urlParams.qty) {
       // Validate quantity is positive number
       const num = parseFloat(urlParams.qty);
       if (!isNaN(num) && num > 0) {
-        setQuantity(urlParams.qty);
+        setQuantity((current) => current !== urlParams.qty ? urlParams.qty! : current);
       }
     }
     if (urlParams.side) {
       const newSide = urlParams.side === "sell" ? "SELL" : "BUY";
-      if (side !== newSide) {
-        setSide(newSide);
-      }
+      setSide((current) => current !== newSide ? newSide : current);
     }
-  }, [urlParams.s, urlParams.qty, urlParams.side, initialSymbols, symbol, quantity, side]);
+  }, [urlParams.s, urlParams.qty, urlParams.side, initialSymbols]);
 
   // Update URL when state changes
   useEffect(() => {
