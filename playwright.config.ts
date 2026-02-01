@@ -34,3 +34,4 @@ export default defineConfig({
     timeout: 120000,
   },
 });
+// Temporary: Add Firefox for testing

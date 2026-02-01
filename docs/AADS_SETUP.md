@@ -1,0 +1,103 @@
+# A-ADS Setup Guide
+
+Set up display advertising with A-ADS (Anonymous Ads).
+
+## Why A-ADS?
+
+- Crypto sites allowed (100% fill)
+- No minimum traffic requirements
+- Cookie-less (no consent banner needed)
+- No JavaScript, just iframes
+
+## Setup Steps
+
+### 1. Create A-ADS Account
+
+1. Go to [a-ads.com](https://a-ads.com)
+2. Click "Earn" → "Add Site"
+3. Sign up with email or Bitcoin wallet
+
+### 2. Add Your Site
+
+1. Enter your domain: `tokenimpact.com` (or your domain)
+2. Select site category: **Finance / Cryptocurrency**
+3. Submit for review (usually instant for crypto sites)
+
+### 3. Create Ad Units
+
+Create 3 ad units with these sizes:
+
+| Slot | Size | Where it shows |
+|------|------|----------------|
+| Top Banner (Mobile) | 320x50 | Below header, mobile |
+| Top Banner (Desktop) | 728x90 | Below header, desktop |
+| Results Bottom | 320x100 / 728x90 | Below results |
+| Sidebar | 300x250 | Right column, desktop only |
+
+**Note:** You can use a single Site ID for all slots - the size is passed as a URL parameter.
+
+### 4. Get Your Site ID
+
+After approval, find your **Site ID** in the dashboard. It looks like: `123456789`
+
+### 5. Configure Environment
+
+Add to your `.env.local`:
+
+```bash
+NEXT_PUBLIC_AADS_SITE_ID=123456789
+```
+
+Replace `123456789` with your actual Site ID.
+
+### 6. Deploy
+
+Deploy your changes. Ads will start showing automatically.
+
+## Testing Locally
+
+Without the env var set, placeholder boxes show the slot dimensions. This is normal for development.
+
+To test with real ads locally:
+```bash
+NEXT_PUBLIC_AADS_SITE_ID=123456789 bun run dev
+```
+
+## Ad Slots in Codebase
+
+The `<AdSlot>` component handles everything:
+
+```tsx
+import { AdSlot } from "@/components/ad-slot";
+
+// In your page
+<AdSlot slotId="top-banner" />
+<AdSlot slotId="results-bottom" />
+<AdSlot slotId="sidebar" />
+```
+
+Currently placed:
+- `app/page.tsx` - top banner
+
+## Revenue & Payments
+
+- Earnings in Bitcoin (BTC)
+- Minimum withdrawal: ~$1 equivalent
+- Payments: daily automatic or manual
+- Dashboard shows impressions, clicks, CPM
+
+## Troubleshooting
+
+**Ads not showing?**
+- Check `NEXT_PUBLIC_AADS_SITE_ID` is set correctly
+- Ensure domain matches what you registered
+- Check browser console for CSP errors
+
+**CSP errors?**
+Add to your Content Security Policy:
+```
+frame-src https://ad.a-ads.com
+```
+
+**Low fill rate?**
+A-ADS has near 100% fill for crypto sites. If empty, check site approval status.
