@@ -62,16 +62,31 @@ test.describe("Quote Form", () => {
   test("preset buttons set quantity values", async ({ page }) => {
     const input = page.locator(SELECTORS.quantityInput);
 
+    // Find preset buttons in the "Quick:" row (visible on desktop)
+    // or use the visible preset buttons in the quantity input area (mobile)
+    async function clickVisiblePreset(text: RegExp) {
+      const buttons = page.locator("button").filter({ hasText: text });
+      const count = await buttons.count();
+      for (let i = 0; i < count; i++) {
+        const btn = buttons.nth(i);
+        if (await btn.isVisible()) {
+          await btn.click();
+          return;
+        }
+      }
+      throw new Error(`No visible button found for ${text}`);
+    }
+
     // Click preset button "10"
-    await page.locator("button").filter({ hasText: /^10$/ }).click();
+    await clickVisiblePreset(/^10$/);
     await expect(input).toHaveValue("10");
 
     // Click preset button "100"
-    await page.locator("button").filter({ hasText: /^100$/ }).click();
+    await clickVisiblePreset(/^100$/);
     await expect(input).toHaveValue("100");
 
-    // Click preset button "1000"
-    await page.locator("button").filter({ hasText: /^1000$/ }).click();
+    // Click preset button "1000" or "1,000"
+    await clickVisiblePreset(/^1,?000$/);
     const value = await input.inputValue();
     expect(value === "1000" || value === "1,000").toBe(true);
   });
@@ -104,7 +119,7 @@ test.describe("Quote Form", () => {
 
     // Select a symbol first
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Try negative value
     await input.fill("-10");
@@ -120,7 +135,7 @@ test.describe("Quote Form", () => {
 
     // Select a symbol first
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Try zero
     await input.fill("0");
@@ -148,7 +163,7 @@ test.describe("Quote Form", () => {
   test("form submits successfully with valid inputs", async ({ page }) => {
     // Select symbol
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Enter quantity
     await page.locator(SELECTORS.quantityInput).fill("1");

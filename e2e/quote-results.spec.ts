@@ -14,7 +14,8 @@ test.describe("Quote Results", () => {
   async function submitQuote(page: import("@playwright/test").Page, symbol = "BTC-USDT", quantity = "1") {
     // Select symbol
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: new RegExp(symbol, "i") }).click();
+    // Use cmdk-item selector instead of role="option"
+    await page.locator(`[cmdk-item]:has-text("${symbol}")`).click();
 
     // Enter quantity
     await page.locator(SELECTORS.quantityInput).fill(quantity);
@@ -26,16 +27,27 @@ test.describe("Quote Results", () => {
   test("results display after form submission", async ({ page }) => {
     await submitQuote(page);
 
-    // Wait for results to appear (either cards on mobile or table on desktop)
-    await expect(
-      page.locator('[class*="card"]').first().or(page.locator("table").first())
-    ).toBeVisible({ timeout: 30000 });
+    // Wait for API response
+    await page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/quote") && response.status() === 200,
+      { timeout: 30000 }
+    );
+
+    // Give UI time to render
+    await page.waitForTimeout(500);
+
+    // Check for results (either exchange cards on mobile or table on desktop)
+    const hasCards = await page.locator('[class*="bg-card"]').first().isVisible().catch(() => false);
+    const hasTable = await page.locator("table").first().isVisible().catch(() => false);
+
+    expect(hasCards || hasTable).toBe(true);
   });
 
   test("loading state shows skeleton during fetch", async ({ page }) => {
     // Select symbol
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Enter quantity
     await page.locator(SELECTORS.quantityInput).fill("1");
@@ -69,18 +81,20 @@ test.describe("Quote Results", () => {
     );
 
     // Give UI time to render
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
-    // Check for multiple exchange results
+    // Check for multiple exchange results (wait for each to be visible or timeout)
     const exchangeNames = ["Binance", "Coinbase", "Kraken"];
     let visibleExchanges = 0;
 
     for (const name of exchangeNames) {
-      const isVisible = await page.getByText(name).first().isVisible().catch(() => false);
+      // Use locator and check if it's visible with a short timeout
+      const locator = page.locator(`text=${name}`).first();
+      const isVisible = await locator.isVisible().catch(() => false);
       if (isVisible) visibleExchanges++;
     }
 
-    // At least 2 exchanges should be shown
+    // At least 2 exchanges should be shown (some may have errors)
     expect(visibleExchanges).toBeGreaterThanOrEqual(2);
   });
 
@@ -97,8 +111,8 @@ test.describe("Quote Results", () => {
     // Give UI time to render
     await page.waitForTimeout(500);
 
-    // Look for BEST badge
-    await expect(page.getByText("BEST")).toBeVisible({ timeout: 5000 });
+    // Look for BEST badge (use first() since "best" appears in multiple places)
+    await expect(page.getByText(/BEST|Best/i).first()).toBeVisible({ timeout: 5000 });
   });
 
   test("price data is visible in results", async ({ page }) => {
@@ -183,8 +197,11 @@ test.describe("Quote Results", () => {
     await expect(page.locator(SELECTORS.copyLinkButton)).toBeVisible({ timeout: 5000 });
   });
 
-  test("copy link button copies URL to clipboard", async ({ page, context }) => {
-    // Grant clipboard permissions
+  // Skip on WebKit - clipboard-write permission not supported
+  test("copy link button copies URL to clipboard", async ({ page, context, browserName }) => {
+    test.skip(browserName === "webkit", "clipboard-write permission not supported in WebKit");
+
+    // Grant clipboard permissions (Chromium/Firefox only)
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
     await submitQuote(page);

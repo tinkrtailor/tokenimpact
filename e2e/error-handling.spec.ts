@@ -27,7 +27,7 @@ test.describe("Error Handling", () => {
   test("validation error for missing quantity", async ({ page }) => {
     // Select symbol without quantity
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Try to submit
     await page.locator(SELECTORS.compareButton).click();
@@ -41,7 +41,7 @@ test.describe("Error Handling", () => {
   test("validation error for invalid quantity (zero)", async ({ page }) => {
     // Select symbol
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Enter zero
     await page.locator(SELECTORS.quantityInput).fill("0");
@@ -63,7 +63,7 @@ test.describe("Error Handling", () => {
 
     // Fix symbol
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Symbol error should clear
     await expect(page.locator(SELECTORS.symbolSelectorError)).not.toBeVisible();
@@ -78,7 +78,7 @@ test.describe("Error Handling", () => {
   test("partial exchange failure shows available results", async ({ page }) => {
     // Submit a valid quote
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
     await page.locator(SELECTORS.quantityInput).fill("1");
     await page.locator(SELECTORS.compareButton).click();
 
@@ -102,7 +102,7 @@ test.describe("Error Handling", () => {
   test("toast notification for exchange timeout", async ({ page }) => {
     // Submit a valid quote
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
     await page.locator(SELECTORS.quantityInput).fill("1");
     await page.locator(SELECTORS.compareButton).click();
 
@@ -124,7 +124,7 @@ test.describe("Error Handling", () => {
   test("unavailable exchanges are displayed gracefully", async ({ page }) => {
     // Submit a valid quote
     await page.locator(SELECTORS.symbolSelector).click();
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
     await page.locator(SELECTORS.quantityInput).fill("1");
     await page.locator(SELECTORS.compareButton).click();
 

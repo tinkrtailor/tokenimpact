@@ -38,8 +38,8 @@ test.describe("Symbol Selector", () => {
     // Wait for filtering
     await page.waitForTimeout(100);
 
-    // Should show BTC pairs
-    await expect(page.getByRole("option", { name: /BTC/i }).first()).toBeVisible();
+    // Should show BTC pairs (use cmdk-item selector)
+    await expect(page.locator('[cmdk-item]:has-text("BTC")').first()).toBeVisible();
 
     // Clear and search for ETH
     await searchInput.clear();
@@ -47,7 +47,7 @@ test.describe("Symbol Selector", () => {
     await page.waitForTimeout(100);
 
     // Should show ETH pairs
-    await expect(page.getByRole("option", { name: /ETH/i }).first()).toBeVisible();
+    await expect(page.locator('[cmdk-item]:has-text("ETH")').first()).toBeVisible();
   });
 
   test("selection updates selector display", async ({ page }) => {
@@ -57,7 +57,7 @@ test.describe("Symbol Selector", () => {
     await selector.click();
 
     // Click on a symbol (BTC-USDT)
-    await page.getByRole("option", { name: /BTC-USDT/i }).click();
+    await page.locator('[cmdk-item]:has-text("BTC-USDT")').click();
 
     // Dropdown should close
     await expect(selector).toHaveAttribute("aria-expanded", "false");
@@ -95,9 +95,12 @@ test.describe("Symbol Selector", () => {
     // Open dropdown
     await page.locator(SELECTORS.symbolSelector).click();
 
-    // Look for exchange badges
-    const badges = page.locator('[data-slot="command-item"]');
-    const firstOption = badges.first();
+    // Wait for dropdown to open
+    await expect(page.locator(SELECTORS.symbolSelector)).toHaveAttribute("aria-expanded", "true");
+
+    // Look for command items (cmdk uses [cmdk-item] attribute)
+    const items = page.locator('[cmdk-item]');
+    const firstOption = items.first();
 
     // Should have exchange abbreviations (BN, CB, KR)
     await expect(firstOption).toBeVisible();

@@ -31,6 +31,7 @@ export const SELECTORS = {
   symbolSelectorError: "#symbol-selector-error",
   symbolSearch: '[placeholder="Search pairs..."]',
   symbolOption: (symbol: string) => `[cmdk-item][data-value="${symbol}"]`,
+  symbolOptionByText: (text: string) => `[cmdk-item]:has-text("${text}")`,
 
   // Direction toggle
   buyButton: 'button[aria-label="Buy"]',
