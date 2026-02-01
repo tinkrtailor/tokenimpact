@@ -23,12 +23,28 @@ A-ADS is crypto-friendly, cookie-less (no consent banner per `specs/consent.md`)
 
 ## Configuration
 
-Environment variable:
+Environment variables (per-slot + per-size):
 ```
-NEXT_PUBLIC_AADS_SITE_ID=<your-site-id>
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_DESKTOP=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_MOBILE=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_DESKTOP=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR_DESKTOP=<your-ad-unit-id>
 ```
 
-When not set, placeholder ads are shown (development mode).
+Fallback options (per-slot):
+```
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM=<your-ad-unit-id>
+NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR=<your-ad-unit-id>
+```
+
+Optional (single ID for all slots):
+```
+NEXT_PUBLIC_AADS_SITE_ID=<your-ad-unit-id>
+```
+
+When the per-size/per-slot IDs (or global ID) are not set, placeholder ads are shown (development mode).
 
 ## Ad Slots
 
@@ -75,6 +91,6 @@ Per `specs/monetization.md`:
 
 ## Fallback
 
-When `NEXT_PUBLIC_AADS_SITE_ID` not set:
+When the per-size/per-slot IDs (or `NEXT_PUBLIC_AADS_SITE_ID`) are not set:
 - Show placeholder with slot ID and dimensions
 - Useful for local development

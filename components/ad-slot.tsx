@@ -47,9 +47,44 @@ const AADS_SIZES: Record<AdSlotId, { mobile: AAdsSize | null; desktop: AAdsSize 
   },
 };
 
-/** Get A-ADS publisher site ID from environment */
-const getAAdsSiteId = (): string | undefined => {
-  return process.env.NEXT_PUBLIC_AADS_SITE_ID;
+/** Per-slot environment variable names (fallback to global) */
+const SLOT_ENV_IDS: Record<AdSlotId, string> = {
+  "top-banner": "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER",
+  "results-bottom": "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM",
+  sidebar: "NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR",
+};
+
+/** Per-slot + per-size environment variable names (preferred) */
+const SLOT_SIZE_ENV_IDS: Record<
+  AdSlotId,
+  { mobile?: string; desktop?: string }
+> = {
+  "top-banner": {
+    mobile: "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE",
+    desktop: "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_DESKTOP",
+  },
+  "results-bottom": {
+    mobile: "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_MOBILE",
+    desktop: "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_DESKTOP",
+  },
+  sidebar: {
+    desktop: "NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR_DESKTOP",
+  },
+};
+
+/** Get A-ADS publisher site IDs from environment */
+const getAAdsSiteIds = (
+  slotId: AdSlotId
+): { mobile?: string; desktop?: string } => {
+  const slotEnv = SLOT_ENV_IDS[slotId];
+  const sizeEnv = SLOT_SIZE_ENV_IDS[slotId];
+  const globalId = process.env.NEXT_PUBLIC_AADS_SITE_ID;
+  const slotFallback = process.env[slotEnv] ?? globalId;
+
+  return {
+    mobile: sizeEnv.mobile ? process.env[sizeEnv.mobile] ?? slotFallback : undefined,
+    desktop: sizeEnv.desktop ? process.env[sizeEnv.desktop] ?? slotFallback : undefined,
+  };
 };
 
 export interface AdSlotProps {
@@ -118,8 +153,8 @@ export function AdSlot({
   }, [isVisible]);
 
   // Check if A-ADS is configured
-  const aadsSiteId = getAAdsSiteId();
-  const hasAds = !!aadsSiteId;
+  const aadsSiteIds = getAAdsSiteIds(slotId);
+  const hasAds = !!(aadsSiteIds.mobile || aadsSiteIds.desktop);
 
   // Get A-ADS sizes for current slot
   const aadsSizes = AADS_SIZES[slotId];
@@ -171,10 +206,10 @@ export function AdSlot({
         {hasAds && isVisible && (
           <>
             {/* Mobile iframe */}
-            {aadsSizes.mobile && (
+            {aadsSizes.mobile && aadsSiteIds.mobile && (
               <iframe
-                data-aa={aadsSiteId}
-                src={`//ad.a-ads.com/${aadsSiteId}?size=${aadsSizes.mobile}`}
+                data-aa={aadsSiteIds.mobile}
+                src={`//ad.a-ads.com/${aadsSiteIds.mobile}?size=${aadsSizes.mobile}`}
                 className="absolute inset-0 lg:hidden border-0"
                 style={{
                   width: dimensions.mobile?.width ?? dimensions.desktop.width,
@@ -185,20 +220,22 @@ export function AdSlot({
               />
             )}
             {/* Desktop iframe */}
-            <iframe
-              data-aa={aadsSiteId}
-              src={`//ad.a-ads.com/${aadsSiteId}?size=${aadsSizes.desktop}`}
-              className={cn(
-                "absolute inset-0 border-0",
-                aadsSizes.mobile ? "hidden lg:block" : ""
-              )}
-              style={{
-                width: dimensions.desktop.width,
-                height: dimensions.desktop.height,
-              }}
-              title={`Advertisement - ${slotId}`}
-              loading="lazy"
-            />
+            {aadsSiteIds.desktop && (
+              <iframe
+                data-aa={aadsSiteIds.desktop}
+                src={`//ad.a-ads.com/${aadsSiteIds.desktop}?size=${aadsSizes.desktop}`}
+                className={cn(
+                  "absolute inset-0 border-0",
+                  aadsSizes.mobile ? "hidden lg:block" : ""
+                )}
+                style={{
+                  width: dimensions.desktop.width,
+                  height: dimensions.desktop.height,
+                }}
+                title={`Advertisement - ${slotId}`}
+                loading="lazy"
+              />
+            )}
           </>
         )}
 

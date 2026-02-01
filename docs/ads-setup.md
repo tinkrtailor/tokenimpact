@@ -27,24 +27,41 @@ This guide explains how to configure display advertising for Token Impact using 
 1. In the dashboard, click "Add new ad unit"
 2. Enter your site URL (e.g., `tokenimpact.com`)
 3. Select ad size (we use multiple sizes, but start with `728x90`)
-4. Copy the **Site ID** from the generated embed code
+4. Copy the **Ad Unit ID** (`data-aa`) from the generated embed code
 
-The site ID is the number in the embed code:
+The Ad Unit ID is the number in the embed code:
 ```html
 <iframe data-aa="12345678" src="//ad.a-ads.com/12345678?size=728x90">
                  ^^^^^^^^
-                 This is your Site ID
+                 This is your Ad Unit ID
+```
+If you create multiple ad units, each will have its own `data-aa` value.
+
+### 3. Configure Environment Variables
+
+Add to your `.env.local` file (per-slot + per-size):
+
+```bash
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE=12345678
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_DESKTOP=12345679
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_MOBILE=23456789
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_DESKTOP=23456780
+NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR_DESKTOP=34567890
 ```
 
-### 3. Configure Environment Variable
+Replace the values with your actual Ad Unit IDs.
 
-Add to your `.env.local` file:
+Fallback options (if you want fewer vars):
+```bash
+NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER=12345678
+NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM=23456789
+NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR=34567890
+```
 
+Optional (single ID for all slots):
 ```bash
 NEXT_PUBLIC_AADS_SITE_ID=12345678
 ```
-
-Replace `12345678` with your actual site ID.
 
 ### 4. Deploy
 
@@ -60,7 +77,7 @@ Deploy your site. Ads will appear automatically in the configured slots.
 
 ## Development Mode
 
-When `NEXT_PUBLIC_AADS_SITE_ID` is not set:
+When the per-size/per-slot IDs (or `NEXT_PUBLIC_AADS_SITE_ID`) are not set:
 - Placeholder boxes show slot ID and dimensions
 - Useful for testing layout without real ads
 
@@ -69,8 +86,8 @@ When `NEXT_PUBLIC_AADS_SITE_ID` is not set:
 1. Go to your Vercel project settings
 2. Navigate to "Environment Variables"
 3. Add:
-   - Name: `NEXT_PUBLIC_AADS_SITE_ID`
-   - Value: Your A-ADS site ID
+   - Name: `NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE` (repeat for each size/slot)
+   - Value: Your A-ADS Ad Unit ID for that size/slot
    - Environment: Production (and Preview if desired)
 4. Redeploy
 
@@ -85,7 +102,11 @@ bun run dev
 
 ### Local Testing with Real Ads
 ```bash
-echo "NEXT_PUBLIC_AADS_SITE_ID=12345678" >> .env.local
+echo "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE=12345678" >> .env.local
+echo "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_DESKTOP=12345679" >> .env.local
+echo "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_MOBILE=23456789" >> .env.local
+echo "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_DESKTOP=23456780" >> .env.local
+echo "NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR_DESKTOP=34567890" >> .env.local
 bun run dev
 # Real ads will load (may show "no ads" if site not approved yet)
 ```
@@ -116,7 +137,7 @@ bun run dev
 
 ### Ads Not Showing
 
-1. **Check environment variable**: Ensure `NEXT_PUBLIC_AADS_SITE_ID` is set
+1. **Check environment variables**: Ensure the per-size/per-slot IDs are set (or `NEXT_PUBLIC_AADS_SITE_ID`)
 2. **Check CSP**: Verify `frame-src` includes `https://ad.a-ads.com`
 3. **Check browser console**: Look for blocked frame errors
 4. **Site approval**: New sites may take 24-48 hours for full ad fill
@@ -131,7 +152,7 @@ A-ADS may show "no ads available" banners initially. This improves as:
 ### Placeholder Showing in Production
 
 Ensure the environment variable is:
-1. Named exactly `NEXT_PUBLIC_AADS_SITE_ID`
+1. Named exactly `NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE` (and the other sizes/slots)
 2. Set in your hosting provider (Vercel, etc.)
 3. Deployment was triggered after adding the variable
 
