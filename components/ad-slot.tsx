@@ -2,90 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  AADS_SIZES,
+  SLOT_DIMENSIONS,
+  getAAdsSiteIds,
+  type AdSlotId,
+} from "@/components/ad-slot-config";
 
-/** Available ad slot IDs */
-export type AdSlotId = "top-banner" | "results-bottom" | "sidebar";
-
-/** Slot dimension configuration */
-interface SlotDimensions {
-  mobile: { width: number; height: number } | null;
-  desktop: { width: number; height: number };
-}
-
-/** A-ADS size format string */
-type AAdsSize = `${number}x${number}`;
-
-/** Dimension configurations per slot */
-const SLOT_DIMENSIONS: Record<AdSlotId, SlotDimensions> = {
-  "top-banner": {
-    mobile: { width: 320, height: 50 },
-    desktop: { width: 728, height: 90 },
-  },
-  "results-bottom": {
-    mobile: { width: 320, height: 100 },
-    desktop: { width: 728, height: 90 },
-  },
-  sidebar: {
-    mobile: null, // Hidden on mobile
-    desktop: { width: 300, height: 250 },
-  },
-};
-
-/** A-ADS size mappings for each slot */
-const AADS_SIZES: Record<AdSlotId, { mobile: AAdsSize | null; desktop: AAdsSize }> = {
-  "top-banner": {
-    mobile: "320x50",
-    desktop: "728x90",
-  },
-  "results-bottom": {
-    mobile: "320x100",
-    desktop: "728x90",
-  },
-  sidebar: {
-    mobile: null,
-    desktop: "300x250",
-  },
-};
-
-/** Per-slot environment variable names (fallback to global) */
-const SLOT_ENV_IDS: Record<AdSlotId, string> = {
-  "top-banner": "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER",
-  "results-bottom": "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM",
-  sidebar: "NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR",
-};
-
-/** Per-slot + per-size environment variable names (preferred) */
-const SLOT_SIZE_ENV_IDS: Record<
-  AdSlotId,
-  { mobile?: string; desktop?: string }
-> = {
-  "top-banner": {
-    mobile: "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_MOBILE",
-    desktop: "NEXT_PUBLIC_AADS_SITE_ID_TOP_BANNER_DESKTOP",
-  },
-  "results-bottom": {
-    mobile: "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_MOBILE",
-    desktop: "NEXT_PUBLIC_AADS_SITE_ID_RESULTS_BOTTOM_DESKTOP",
-  },
-  sidebar: {
-    desktop: "NEXT_PUBLIC_AADS_SITE_ID_SIDEBAR_DESKTOP",
-  },
-};
-
-/** Get A-ADS publisher site IDs from environment */
-const getAAdsSiteIds = (
-  slotId: AdSlotId
-): { mobile?: string; desktop?: string } => {
-  const slotEnv = SLOT_ENV_IDS[slotId];
-  const sizeEnv = SLOT_SIZE_ENV_IDS[slotId];
-  const globalId = process.env.NEXT_PUBLIC_AADS_SITE_ID;
-  const slotFallback = process.env[slotEnv] ?? globalId;
-
-  return {
-    mobile: sizeEnv.mobile ? process.env[sizeEnv.mobile] ?? slotFallback : undefined,
-    desktop: sizeEnv.desktop ? process.env[sizeEnv.desktop] ?? slotFallback : undefined,
-  };
-};
+export type { AdSlotId };
 
 export interface AdSlotProps {
   /** The slot ID determining size and placement */
